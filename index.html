@@ -798,7 +798,7 @@
     }
 
     async function confirmComplete() {
-      const task = tasks.find(t => t.id === currentTaskId);
+      const task = tasks.find(t => String(t.id) === String(currentTaskId));
       if (!task) return;
       const startTime = document.getElementById('startTime').value;
       const endTime = document.getElementById('endTime').value;
