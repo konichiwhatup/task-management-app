@@ -277,11 +277,6 @@
           <button onclick="addExtraStudy()" class="btn-primary">記録する</button>
         </div>
 
-        <!-- History -->
-        <div>
-          <h3 style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0 0 16px 0;">完了履歴（最新20件）</h3>
-          <div id="historyList" style="display: flex; flex-direction: column; gap: 8px;"></div>
-        </div>
       </div>
 
       <!-- Week Compare Tab -->
@@ -505,7 +500,6 @@
       onSnapshot(collection(window.db, `users/${userId}/completed`), snapshot => {
         completedTasks = snapshot.docs.map(d => ({ ...d.data(), id: d.id }))
           .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
-        renderHistory();
         renderCategoryStats();
         renderWeekCompare();
         renderWeekGraph();
@@ -872,7 +866,6 @@
 
     function render() {
       renderTasks();
-      renderHistory();
       renderCategoryStats();
       renderWeekCompare();
       renderWeekGraph();
@@ -891,14 +884,14 @@
 
       // Today
       document.getElementById('todayTaskList').innerHTML = `
-        <div style="border-radius: 12px; overflow: hidden; border: 1px solid #e8e8ed;">
+        <div style="border-radius: 12px; overflow: hidden; border: 1px solid #d2d2d7;">
           <div style="background: #1d1d1f; color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 12px; font-weight: 500;">${today} · 今日</span>
+            <span style="font-size: 12px; font-weight: 600;">${today} · 今日</span>
             ${todayTasks.length > 0 ? `<span style="font-size: 12px; color: #8e8e93;">${todayTasks.length}件</span>` : ''}
           </div>
           ${todayTasks.length === 0
             ? '<div style="padding: 16px; font-size: 14px; color: var(--text-3);">タスクはありません</div>'
-            : todayTasks.map(t => renderTaskItem(t)).join('')
+            : todayTasks.map(t => renderTaskItem(t, 'today')).join('')
           }
         </div>
       `;
@@ -906,9 +899,9 @@
       // Past
       if (pastTasks.length === 0) {
         document.getElementById('pastTaskList').innerHTML = `
-          <div style="border-radius: 12px; overflow: hidden; border: 1px solid #e8e8ed;">
-            <div style="background: #6e6e73; color: white; padding: 10px 16px;">
-              <span style="font-size: 12px; font-weight: 500;">過去の未完了</span>
+          <div style="border-radius: 12px; overflow: hidden; border: 1px solid #fca5a5;">
+            <div style="background: #dc2626; color: white; padding: 10px 16px;">
+              <span style="font-size: 12px; font-weight: 600;">過去の未完了</span>
             </div>
             <div style="padding: 16px; font-size: 14px; color: var(--text-3);">ありません</div>
           </div>
@@ -918,15 +911,15 @@
         pastTasks.forEach(t => { if (!grouped[t.date]) grouped[t.date] = []; grouped[t.date].push(t); });
         const sortedDates = Object.keys(grouped).sort().reverse();
         document.getElementById('pastTaskList').innerHTML = `
-          <div style="border-radius: 12px; overflow: hidden; border: 1px solid #e8e8ed;">
-            <div style="background: #6e6e73; color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 12px; font-weight: 500;">過去の未完了</span>
-              <span style="font-size: 12px; color: #d2d2d7;">${pastTasks.length}件</span>
+          <div style="border-radius: 12px; overflow: hidden; border: 1px solid #fca5a5;">
+            <div style="background: #dc2626; color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 12px; font-weight: 600;">過去の未完了</span>
+              <span style="font-size: 12px; color: #fca5a5;">${pastTasks.length}件</span>
             </div>
             ${sortedDates.map(date => `
-              <div style="padding: 8px 16px 4px; border-top: 1px solid #f5f5f7;">
-                <div style="font-size: 11px; font-weight: 500; color: var(--text-3); margin-bottom: 4px;">${date}</div>
-                ${grouped[date].map(t => renderTaskItem(t, true)).join('')}
+              <div style="padding: 8px 16px 4px; border-top: 1px solid #fee2e2;">
+                <div style="font-size: 11px; font-weight: 500; color: #dc2626; margin-bottom: 4px;">${date}</div>
+                ${grouped[date].map(t => renderTaskItem(t, 'past')).join('')}
               </div>
             `).join('')}
           </div>
@@ -939,26 +932,31 @@
       futureTasks.forEach(t => { if (!grouped[t.date]) grouped[t.date] = []; grouped[t.date].push(t); });
       const sortedDates = Object.keys(grouped).sort();
       document.getElementById('futureTaskList').innerHTML = sortedDates.map(date => `
-        <div style="border-radius: 12px; overflow: hidden; border: 1px solid #e8e8ed; margin-bottom: 10px;">
-          <div style="background: #aeaeb2; color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="border-radius: 12px; overflow: hidden; border: 1px solid #e8e8ed; margin-bottom: 10px; opacity: 0.65;">
+          <div style="background: #c7c7cc; color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
             <span style="font-size: 12px; font-weight: 500;">${date} · 予定</span>
             <span style="font-size: 12px; color: #f5f5f7;">${grouped[date].length}件</span>
           </div>
-          ${grouped[date].map(t => renderTaskItem(t)).join('')}
+          ${grouped[date].map(t => renderTaskItem(t, 'future')).join('')}
         </div>
       `).join('');
     }
 
-    function renderTaskItem(task, compact = false) {
+    function renderTaskItem(task, variant = 'today') {
       const color = CATEGORY_COLORS[task.category];
+      const bg = variant === 'past' ? '#fff5f5' : variant === 'future' ? '#fafafa' : 'white';
+      const divider = variant === 'past' ? '#fee2e2' : '#f5f5f7';
+      const titleColor = variant === 'future' ? 'var(--text-2)' : 'var(--text-1)';
+      const metaColor = variant === 'past' ? '#ef4444' : 'var(--text-3)';
+      const padding = variant === 'past' ? '8px 16px' : '12px 16px';
       return `
-        <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; padding: ${compact ? '8px 16px' : '12px 16px'}; background: white; border-top: 1px solid #f5f5f7;">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; padding: ${padding}; background: ${bg}; border-top: 1px solid ${divider};">
           <div style="flex: 1; min-width: 0;">
             <div style="margin-bottom: 4px;">
               <span class="badge" style="background-color: ${color};">${task.category}</span>
             </div>
-            <p style="font-size: 14px; font-weight: 500; color: var(--text-1); margin: 0 0 2px 0; word-break: break-word;">${task.content}</p>
-            <p style="font-size: 12px; color: var(--text-3); margin: 0;">${task.plannedDuration}分</p>
+            <p style="font-size: 14px; font-weight: 500; color: ${titleColor}; margin: 0 0 2px 0; word-break: break-word;">${task.content}</p>
+            <p style="font-size: 12px; color: ${metaColor}; margin: 0;">${task.plannedDuration}分</p>
           </div>
           <div style="display: flex; gap: 4px; flex-shrink: 0;">
             <button onclick="editTask(${task.originalIndex})" class="btn-ghost" style="font-size: 12px;">編集</button>
@@ -969,37 +967,6 @@
       `;
     }
 
-    function renderHistory() {
-      const list = document.getElementById('historyList');
-      const recent = completedTasks.slice(0, 20);
-      if (recent.length === 0) {
-        list.innerHTML = '<p style="font-size: 14px; color: var(--text-3);">完了履歴はありません</p>';
-        return;
-      }
-      list.innerHTML = recent.map((task, index) => {
-        const color = CATEGORY_COLORS[task.category];
-        return `
-          <div style="background: white; border: 1px solid #e8e8ed; border-radius: 12px; padding: 14px 16px;">
-            <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; margin-bottom: 8px;">
-              <div style="display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; flex-wrap: wrap;">
-                ${task.isExtra ? `<span class="badge" style="background: #8e8e93;">タスク外</span>` : ''}
-                <span class="badge" style="background-color: ${color};">${task.category}</span>
-                <span style="font-size: 12px; color: var(--text-3);">${task.date}</span>
-                ${task.startTime && task.endTime ? `<span style="font-size: 12px; color: var(--text-3);">${task.startTime}–${task.endTime}</span>` : ''}
-              </div>
-              <div style="display: flex; gap: 4px; flex-shrink: 0;">
-                ${!task.isExtra ? `<button onclick="uncompleteTask(${index})" class="btn-ghost" style="font-size: 12px;">戻す</button>` : ''}
-                <button onclick="editHistory(${index})" class="btn-ghost" style="font-size: 12px;">編集</button>
-                <button onclick="deleteHistory(${index})" class="btn-ghost" style="font-size: 12px; color: var(--text-3);">削除</button>
-              </div>
-            </div>
-            <p style="font-size: 14px; font-weight: 500; color: var(--text-1); margin: 0 0 4px 0;">${task.content}</p>
-            <p style="font-size: 12px; color: var(--text-2); margin: 0;">${task.isExtra ? `${task.actualDuration}分` : `${task.actualDuration}分（予定 ${task.plannedDuration}分）`}</p>
-            ${task.comment ? `<p style="font-size: 12px; color: var(--text-2); font-style: italic; margin: 4px 0 0 0;">"${task.comment}"</p>` : ''}
-          </div>
-        `;
-      }).join('');
-    }
 
     function renderCategoryStats() {
       const stats = {};
@@ -1227,6 +1194,10 @@
                   ${Object.entries(byCategory).filter(([, t]) => t > 0).map(([cat]) => `
                     <div style="height: 2px; border-radius: 1px; background-color: ${CATEGORY_COLORS[cat]}; margin-bottom: 2px;"></div>
                   `).join('')}
+                  ${dayTasks.slice(0, 3).map(t => `
+                    <div style="font-size: 9px; color: var(--text-2); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 2px; line-height: 1.3;">${t.content}</div>
+                  `).join('')}
+                  ${dayTasks.length > 3 ? `<div style="font-size: 9px; color: var(--text-3); margin-top: 1px;">+${dayTasks.length - 3}件</div>` : ''}
                 ` : ''}
               </div>
             `;
