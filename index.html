@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task Tracker</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
       --bg: #f5f5f7;
@@ -14,206 +13,126 @@
       --text-3: #aeaeb2;
       --divider: #d2d2d7;
     }
-
-    * { box-sizing: border-box; }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
       background: var(--bg);
       color: var(--text-1);
       -webkit-font-smoothing: antialiased;
     }
-
     .card {
       background: var(--surface);
       border-radius: 16px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
     }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--text-1);
-      color: #fff;
-      border-radius: 8px;
-      padding: 9px 18px;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      transition: background 0.15s;
-      white-space: nowrap;
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      border: none; border-radius: 8px; cursor: pointer; font-family: inherit;
+      font-weight: 500; white-space: nowrap; transition: opacity 0.15s;
     }
-    .btn-primary:hover { background: #3a3a3c; }
-    .btn-primary.w-full { width: 100%; }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #f5f5f7;
-      color: var(--text-1);
-      border-radius: 8px;
-      padding: 9px 18px;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
-    .btn-secondary:hover { background: #e8e8ed; }
-
-    .btn-ghost {
-      display: inline-flex;
-      align-items: center;
-      background: transparent;
-      color: var(--text-2);
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 13px;
-      font-weight: 400;
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      transition: color 0.15s;
-      white-space: nowrap;
-    }
-    .btn-ghost:hover { color: var(--text-1); }
-
+    .btn:hover { opacity: 0.8; }
+    .btn-dark  { background: var(--text-1); color: #fff; padding: 9px 18px; font-size: 14px; }
+    .btn-light { background: #f0f0f5; color: var(--text-1); padding: 9px 18px; font-size: 14px; }
+    .btn-ghost { background: transparent; color: var(--text-2); padding: 4px 8px; font-size: 13px; }
+    .btn-ghost:hover { color: var(--text-1); opacity: 1; }
+    .btn-start { background: #34c759; color: #fff; padding: 5px 12px; font-size: 12px; border-radius: 6px; }
+    .btn-stop  { background: #dc2626; color: #fff; padding: 5px 12px; font-size: 12px; border-radius: 6px;
+                 animation: pulse 1.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.65; } }
     .input {
-      border: 1px solid var(--divider);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 15px;
-      font-family: inherit;
-      width: 100%;
-      background: var(--surface);
-      color: var(--text-1);
-      transition: border-color 0.15s;
-      outline: none;
+      border: 1px solid var(--divider); border-radius: 10px; padding: 10px 14px;
+      font-size: 15px; font-family: inherit; width: 100%; background: var(--surface);
+      color: var(--text-1); outline: none; transition: border-color 0.15s;
     }
     .input:focus { border-color: var(--text-1); }
     .input::placeholder { color: var(--text-3); }
-
     select.input {
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236e6e73' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
-      cursor: pointer;
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer;
     }
-
-    .tab-active {
-      color: var(--text-1);
-      border-bottom: 2px solid var(--text-1);
-    }
-    .tab-inactive {
-      color: var(--text-2);
-      border-bottom: 2px solid transparent;
-    }
-    .tab-inactive:hover { color: var(--text-1); }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      color: white;
-      letter-spacing: 0.01em;
-    }
-
     textarea.input { resize: vertical; }
+    .tab-active   { color: var(--text-1); border-bottom: 2px solid var(--text-1); }
+    .tab-inactive { color: var(--text-2); border-bottom: 2px solid transparent; }
+    .tab-inactive:hover { color: var(--text-1); }
+    .badge {
+      display: inline-flex; align-items: center; padding: 2px 7px;
+      border-radius: 4px; font-size: 11px; font-weight: 600; color: white;
+    }
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-3);
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 480px) { .grid-2 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
   <!-- User ID Modal -->
-  <div id="userIdModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4" style="z-index: 2000; display: none;">
-    <div class="card p-8 w-full max-w-sm">
-      <h3 class="text-lg font-semibold mb-2" style="color: var(--text-1)">ユーザーID設定</h3>
-      <p class="text-sm mb-6" style="color: var(--text-2)">自分専用のIDでデータを管理します。</p>
-      <input type="text" id="userIdInput" placeholder="4文字以上のID" class="input mb-3">
-      <p class="text-xs mb-5" style="color: var(--text-3)">他人に推測されにくいIDを設定してください</p>
-      <button onclick="setUserId()" class="btn-primary w-full">設定する</button>
+  <div id="userIdModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:2000; align-items:center; justify-content:center; padding:16px;">
+    <div class="card" style="padding:32px; width:100%; max-width:360px;">
+      <h3 style="font-size:18px; font-weight:600; margin-bottom:8px;">ユーザーID設定</h3>
+      <p style="font-size:14px; color:var(--text-2); margin-bottom:20px;">自分専用のIDでデータを管理します。</p>
+      <input type="text" id="userIdInput" placeholder="4文字以上のID" class="input" style="margin-bottom:8px;">
+      <p style="font-size:12px; color:var(--text-3); margin-bottom:20px;">他人に推測されにくいIDを設定してください</p>
+      <button onclick="setUserId()" class="btn btn-dark" style="width:100%;">設定する</button>
     </div>
   </div>
 
-  <div style="max-width: 900px; margin: 0 auto; padding: 32px 16px 64px;">
+  <div style="max-width:860px; margin:0 auto; padding:32px 16px 80px;">
 
     <!-- Header -->
-    <div style="margin-bottom: 40px;">
-      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
-        <div>
-          <h1 style="font-size: clamp(22px, 4vw, 30px); font-weight: 600; letter-spacing: -0.02em; color: var(--text-1); margin: 0 0 4px 0;">Task Tracker</h1>
-          <p style="font-size: 14px; color: var(--text-2); margin: 0;">日々の学習を記録する</p>
-        </div>
-        <button onclick="changeUserId()" class="btn-ghost" style="margin-top: 4px; flex-shrink: 0;">ID変更</button>
-      </div>
-    </div>
-
-    <!-- Category Stats -->
-    <div class="card" style="padding: 24px; margin-bottom: 16px;">
-      <p style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); margin: 0 0 16px 0;">カテゴリ統計</p>
-      <div id="categoryStats" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;"></div>
-    </div>
-
-    <!-- Weekly Goal History -->
-    <div class="card" style="padding: 24px; margin-bottom: 16px;">
-      <p style="font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); margin: 0 0 20px 0;">週間目標</p>
-
-      <!-- Current week -->
-      <div style="margin-bottom: 20px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-          <span id="currentWeekLabel" style="font-size: 13px; font-weight: 500; color: var(--text-1);"></span>
-          <span style="font-size: 11px; color: var(--text-3); background: #f5f5f7; padding: 2px 8px; border-radius: 4px;">今週</span>
-        </div>
-        <div style="margin-bottom: 10px;">
-          <p id="currentGoalText" style="font-size: 15px; color: var(--text-1); margin: 0 0 6px 0; line-height: 1.5;"></p>
-          <button onclick="editCurrentWeekGoal()" id="editGoalBtn" class="btn-ghost" style="padding: 0; font-size: 13px; color: var(--text-3);">+ 目標を設定する</button>
-        </div>
-        <div style="padding-top: 10px; border-top: 1px solid #f5f5f7;">
-          <p id="currentReflectionText" style="font-size: 14px; color: var(--text-2); font-style: italic; margin: 0 0 6px 0; line-height: 1.5;"></p>
-          <button onclick="editCurrentWeekReflection()" id="editReflectionBtn" class="btn-ghost" style="padding: 0; font-size: 13px; color: var(--text-3);">+ 振り返りを追加する</button>
-        </div>
-      </div>
-
-      <!-- Past weeks toggle -->
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:36px;">
       <div>
-        <button onclick="togglePastWeeks()" style="display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; font-size: 13px; color: var(--text-2); font-family: inherit; padding: 0;" id="togglePastWeeksBtn">
+        <h1 style="font-size:clamp(20px,4vw,28px); font-weight:600; letter-spacing:-0.02em;">Task Tracker</h1>
+        <p style="font-size:14px; color:var(--text-2); margin-top:4px;">日々の学習を記録する</p>
+      </div>
+      <button onclick="changeUserId()" class="btn btn-ghost" style="margin-top:4px; flex-shrink:0;">ID変更</button>
+    </div>
+
+    <!-- Weekly Goals -->
+    <div class="card" style="padding:24px; margin-bottom:14px;">
+      <p class="section-label" style="margin-bottom:18px;">週間目標</p>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+        <span id="currentWeekLabel" style="font-size:13px; font-weight:500;"></span>
+        <span style="font-size:11px; color:var(--text-3); background:#f5f5f7; padding:2px 8px; border-radius:4px;">今週</span>
+      </div>
+      <div style="margin-bottom:12px;">
+        <p id="currentGoalText" style="font-size:15px; line-height:1.5; margin-bottom:6px; display:none;"></p>
+        <button onclick="editCurrentWeekGoal()" id="editGoalBtn" class="btn btn-ghost" style="padding:0; font-size:13px; color:var(--text-3);">+ 目標を設定する</button>
+      </div>
+      <div style="padding-top:10px; border-top:1px solid #f5f5f7;">
+        <p id="currentReflectionText" style="font-size:14px; color:var(--text-2); font-style:italic; line-height:1.5; margin-bottom:6px; display:none;"></p>
+        <button onclick="editCurrentWeekReflection()" id="editReflectionBtn" class="btn btn-ghost" style="padding:0; font-size:13px; color:var(--text-3);">+ 振り返りを追加する</button>
+      </div>
+      <div style="margin-top:16px;">
+        <button onclick="togglePastWeeks()" style="display:flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer; font-size:13px; color:var(--text-2); font-family:inherit; padding:0;">
           <span>過去の週を見る</span>
-          <span id="pastWeeksChevron" style="font-size: 16px; line-height: 1; transition: transform 0.2s;">›</span>
+          <span id="pastWeeksChevron" style="font-size:16px; transition:transform 0.2s;">›</span>
         </button>
-        <div id="pastWeeksList" style="display: none; margin-top: 16px;"></div>
+        <div id="pastWeeksList" style="display:none; margin-top:14px;"></div>
       </div>
     </div>
 
     <!-- Tabs -->
-    <div class="card" style="margin-bottom: 16px; overflow: hidden;">
-      <div style="display: flex; border-bottom: 1px solid #f5f5f7; overflow-x: auto; -webkit-overflow-scrolling: touch;">
-        <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-button tab-active" style="padding: 14px 20px; font-size: 14px; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; white-space: nowrap;">タスク管理</button>
-        <button onclick="switchTab('weekCompare')" id="tab-weekCompare" class="tab-button tab-inactive" style="padding: 14px 20px; font-size: 14px; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; white-space: nowrap;">週間比較</button>
-        <button onclick="switchTab('weekGraph')" id="tab-weekGraph" class="tab-button tab-inactive" style="padding: 14px 20px; font-size: 14px; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; white-space: nowrap;">週間グラフ</button>
-        <button onclick="switchTab('calendar')" id="tab-calendar" class="tab-button tab-inactive" style="padding: 14px 20px; font-size: 14px; font-weight: 500; background: none; border: none; cursor: pointer; font-family: inherit; white-space: nowrap;">カレンダー</button>
+    <div class="card" style="overflow:hidden;">
+      <div style="display:flex; border-bottom:1px solid #f5f5f7; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+        <button onclick="switchTab('tasks')" id="tab-tasks" class="btn tab-button tab-active" style="padding:14px 20px; font-size:14px; background:none; font-family:inherit; white-space:nowrap; border-radius:0;">タスク管理</button>
+        <button onclick="switchTab('graph')" id="tab-graph" class="btn tab-button tab-inactive" style="padding:14px 20px; font-size:14px; background:none; font-family:inherit; white-space:nowrap; border-radius:0;">週間グラフ</button>
       </div>
 
-      <!-- Task Tab -->
-      <div id="content-tasks" class="tab-content" style="padding: 28px 24px;">
-        <!-- Add Task -->
-        <div style="margin-bottom: 32px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-            <h3 style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0;">タスクを追加</h3>
-            <button onclick="toggleAddMode()" class="btn-ghost" id="toggleModeBtn">一括登録</button>
-          </div>
+      <!-- Tasks Tab -->
+      <div id="content-tasks" class="tab-content" style="padding:24px;">
 
+        <!-- Add Task -->
+        <div style="margin-bottom:28px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+            <h3 style="font-size:15px; font-weight:600;">タスクを追加</h3>
+            <button onclick="toggleAddMode()" class="btn btn-ghost" id="toggleModeBtn">一括登録</button>
+          </div>
           <div id="singleAddForm">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+            <div class="grid-2" style="margin-bottom:10px;">
               <input type="date" id="taskDate" class="input">
               <select id="taskCategory" class="input">
                 <option value="英語">英語</option>
@@ -222,45 +141,36 @@
                 <option value="仕事">仕事</option>
                 <option value="その他">その他</option>
               </select>
-              <input type="text" id="taskContent" placeholder="タスク内容" class="input" style="grid-column: 1 / -1;">
+              <input type="text" id="taskContent" placeholder="タスク内容" class="input" style="grid-column:1/-1;">
               <input type="number" id="taskDuration" placeholder="予定時間（分）" value="30" class="input">
-              <div></div>
             </div>
-            <button onclick="addTask()" class="btn-primary">追加</button>
+            <button onclick="addTask()" class="btn btn-dark">追加</button>
           </div>
-
-          <div id="bulkAddForm" style="display: none;">
-            <div style="background: #f5f5f7; border-radius: 10px; padding: 14px; margin-bottom: 12px; font-size: 12px; color: var(--text-2);">
-              <div style="font-weight: 600; color: var(--text-1); margin-bottom: 8px;">入力例</div>
-              <div style="font-family: 'SF Mono', 'Menlo', monospace; line-height: 1.8;">
-                2/24<br>
-                英語 リスニング練習 45分<br>
-                単語学習<br>
-                <br>
-                2/25<br>
-                資格勉強 過去問演習 60分
-              </div>
-              <div style="margin-top: 8px; color: var(--text-3);">日付形式: 2/24, 02/24, 2026-02-24, 今日, 明日</div>
+          <div id="bulkAddForm" style="display:none;">
+            <div style="background:#f5f5f7; border-radius:10px; padding:14px; margin-bottom:10px; font-size:12px; color:var(--text-2);">
+              <div style="font-weight:600; color:var(--text-1); margin-bottom:6px;">入力例</div>
+              <div style="font-family:monospace; line-height:1.8;">2/24<br>英語 リスニング練習 45分<br>単語学習<br><br>2/25<br>資格勉強 過去問演習 60分</div>
+              <div style="margin-top:8px; color:var(--text-3);">日付形式: 2/24, 02/24, 2026-02-24, 今日, 明日</div>
             </div>
-            <textarea id="bulkInput" rows="10" class="input" style="font-family: 'SF Mono', 'Menlo', monospace; font-size: 13px; margin-bottom: 12px;" placeholder="2/24&#10;単語学習&#10;英語 リスニング 45分"></textarea>
-            <button onclick="bulkAddTasks()" class="btn-primary">登録</button>
+            <textarea id="bulkInput" rows="8" class="input" style="font-family:monospace; font-size:13px; margin-bottom:10px;" placeholder="2/24&#10;単語学習&#10;英語 リスニング 45分"></textarea>
+            <button onclick="bulkAddTasks()" class="btn btn-dark">登録</button>
           </div>
         </div>
 
-        <!-- Pending tasks -->
-        <div style="margin-bottom: 32px;">
-          <h3 style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0 0 16px 0;">未完了タスク</h3>
-          <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+        <!-- Pending Tasks -->
+        <div style="margin-bottom:28px;">
+          <h3 style="font-size:15px; font-weight:600; margin-bottom:14px;">未完了タスク</h3>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
             <div id="todayTaskList"></div>
             <div id="pastTaskList"></div>
           </div>
-          <div id="futureTaskList" style="margin-top: 12px;"></div>
+          <div id="futureTaskList" style="margin-top:12px;"></div>
         </div>
 
-        <!-- Extra study -->
-        <div style="background: #f5f5f7; border-radius: 12px; padding: 20px; margin-bottom: 32px;">
-          <h3 style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0 0 16px 0;">タスク外の学習を記録</h3>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+        <!-- Extra Study -->
+        <div style="background:#f5f5f7; border-radius:12px; padding:20px; margin-bottom:28px;">
+          <h3 style="font-size:15px; font-weight:600; margin-bottom:14px;">タスク外の学習を記録</h3>
+          <div class="grid-2" style="margin-bottom:10px;">
             <input type="date" id="extraDate" class="input">
             <select id="extraCategory" class="input">
               <option value="英語">英語</option>
@@ -269,99 +179,85 @@
               <option value="仕事">仕事</option>
               <option value="その他">その他</option>
             </select>
-            <input type="text" id="extraContent" placeholder="学習内容" class="input" style="grid-column: 1 / -1;">
+            <input type="text" id="extraContent" placeholder="学習内容" class="input" style="grid-column:1/-1;">
             <input type="number" id="extraDuration" placeholder="実際の時間（分）" class="input">
-            <div></div>
           </div>
-          <input type="text" id="extraComment" placeholder="コメント（任意）" class="input" style="margin-bottom: 12px;">
-          <button onclick="addExtraStudy()" class="btn-primary">記録する</button>
+          <input type="text" id="extraComment" placeholder="コメント（任意）" class="input" style="margin-bottom:10px;">
+          <button onclick="addExtraStudy()" class="btn btn-dark">記録する</button>
         </div>
 
-      </div>
-
-      <!-- Week Compare Tab -->
-      <div id="content-weekCompare" class="tab-content" style="padding: 28px 24px; display: none;">
-        <h3 style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0 0 24px 0;">週間比較</h3>
-        <div id="weekCompareChart" style="margin-bottom: 24px;"></div>
-        <div id="categoryComparison" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px;"></div>
-      </div>
-
-      <!-- Week Graph Tab -->
-      <div id="content-weekGraph" class="tab-content" style="padding: 28px 24px; display: none;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 12px;">
-          <button onclick="changeWeek(-1)" class="btn-secondary" style="padding: 8px 14px; font-size: 13px;">← 前週</button>
-          <h3 id="weekTitle" style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0; text-align: center;"></h3>
-          <button onclick="changeWeek(1)" class="btn-secondary" style="padding: 8px 14px; font-size: 13px;">次週 →</button>
+        <!-- Completed History -->
+        <div>
+          <button onclick="toggleHistory()" style="display:flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer; font-size:15px; font-weight:600; font-family:inherit; color:var(--text-1); padding:0; margin-bottom:0;">
+            <span>完了履歴</span>
+            <span id="historyChevron" style="font-size:16px; color:var(--text-3); transition:transform 0.2s;">›</span>
+          </button>
+          <div id="historyList" style="display:none; margin-top:14px; display: flex; flex-direction:column; gap:8px;"></div>
         </div>
-        <div id="weekGraphChart" style="margin-bottom: 24px;"></div>
+      </div>
+
+      <!-- Graph Tab -->
+      <div id="content-graph" class="tab-content" style="padding:24px; display:none;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; gap:12px;">
+          <button onclick="changeWeek(-1)" class="btn btn-light" style="padding:8px 14px; font-size:13px;">← 前週</button>
+          <h3 id="weekTitle" style="font-size:15px; font-weight:600; text-align:center;"></h3>
+          <button onclick="changeWeek(1)" class="btn btn-light" style="padding:8px 14px; font-size:13px;">次週 →</button>
+        </div>
+        <div id="weekGraphChart" style="margin-bottom:20px;"></div>
         <div id="weekDetails"></div>
-      </div>
-
-      <!-- Calendar Tab -->
-      <div id="content-calendar" class="tab-content" style="padding: 28px 24px; display: none;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 12px;">
-          <button onclick="changeMonth(-1)" class="btn-secondary" style="padding: 8px 14px; font-size: 13px;">← 前月</button>
-          <h3 id="calendarTitle" style="font-size: 15px; font-weight: 600; color: var(--text-1); margin: 0;"></h3>
-          <button onclick="changeMonth(1)" class="btn-secondary" style="padding: 8px 14px; font-size: 13px;">次月 →</button>
-        </div>
-        <div id="calendarView"></div>
       </div>
     </div>
 
   </div>
 
   <!-- Complete Modal -->
-  <div id="completeModal" class="fixed inset-0 bg-black bg-opacity-40 items-center justify-center p-4" style="z-index: 1000; display: none;">
-    <div class="card" style="padding: 28px; width: 100%; max-width: 400px;">
-      <h3 style="font-size: 16px; font-weight: 600; color: var(--text-1); margin: 0 0 20px 0;">タスクを完了</h3>
-      <div style="display: flex; flex-direction: column; gap: 14px;">
+  <div id="completeModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:1000; align-items:center; justify-content:center; padding:16px;">
+    <div class="card" style="padding:28px; width:100%; max-width:400px;">
+      <h3 style="font-size:16px; font-weight:600; margin-bottom:20px;">タスクを完了</h3>
+      <div style="display:flex; flex-direction:column; gap:14px;">
         <div>
-          <label style="display: block; font-size: 12px; font-weight: 500; color: var(--text-2); margin-bottom: 6px;">開始時刻（任意）</label>
+          <label style="display:block; font-size:12px; font-weight:500; color:var(--text-2); margin-bottom:6px;">開始時刻（任意）</label>
           <input type="time" id="startTime" class="input">
         </div>
         <div>
-          <label style="display: block; font-size: 12px; font-weight: 500; color: var(--text-2); margin-bottom: 6px;">終了時刻（任意）</label>
+          <label style="display:block; font-size:12px; font-weight:500; color:var(--text-2); margin-bottom:6px;">終了時刻（任意）</label>
           <input type="time" id="endTime" class="input">
         </div>
         <div>
-          <label style="display: block; font-size: 12px; font-weight: 500; color: var(--text-2); margin-bottom: 6px;">実際の時間（分）<span style="color: var(--text-1);"> *</span></label>
+          <label style="display:block; font-size:12px; font-weight:500; color:var(--text-2); margin-bottom:6px;">実際の時間（分） <span style="color:var(--text-1);">*</span></label>
           <input type="number" id="actualDuration" class="input" placeholder="必須">
         </div>
         <div>
-          <label style="display: block; font-size: 12px; font-weight: 500; color: var(--text-2); margin-bottom: 6px;">コメント（任意）</label>
+          <label style="display:block; font-size:12px; font-weight:500; color:var(--text-2); margin-bottom:6px;">コメント（任意）</label>
           <textarea id="taskComment" rows="3" class="input"></textarea>
         </div>
       </div>
-      <div style="display: flex; gap: 10px; margin-top: 20px;">
-        <button onclick="closeCompleteModal()" class="btn-secondary" style="flex: 1;">キャンセル</button>
-        <button onclick="confirmComplete()" class="btn-primary" style="flex: 1;">完了</button>
+      <div style="display:flex; gap:10px; margin-top:20px;">
+        <button onclick="closeCompleteModal()" class="btn btn-light" style="flex:1;">キャンセル</button>
+        <button onclick="confirmComplete()" class="btn btn-dark" style="flex:1;">完了</button>
       </div>
     </div>
   </div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-    import { getFirestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
-
-    const firebaseConfig = {
+    import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+    const app = initializeApp({
       apiKey: "AIzaSyCh7IZR762rsfWx8B-OOjB08ovbU5n5Frg",
       authDomain: "task-management-app-612b1.firebaseapp.com",
       projectId: "task-management-app-612b1",
       storageBucket: "task-management-app-612b1.firebasestorage.app",
       messagingSenderId: "838874576804",
       appId: "1:838874576804:web:ec7f34b8fd5a23988b3331"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    window.db = db;
-    window.firestore = { collection, doc, setDoc, getDoc, getDocs, deleteDoc, onSnapshot };
+    });
+    window.db = getFirestore(app);
+    window.firestore = { collection, doc, setDoc, getDocs, deleteDoc, onSnapshot };
   </script>
 
   <script>
     const CATEGORIES = ['英語', '資格勉強', '筋トレ', '仕事', 'その他'];
-    const CATEGORY_COLORS = {
+    const CAT_COLOR = {
       '英語':    '#0071e3',
       '資格勉強': '#ff9500',
       '筋トレ':  '#34c759',
@@ -369,30 +265,32 @@
       'その他':  '#8e8e93'
     };
 
-    let tasks = [];
-    let completedTasks = [];
+    let tasks = [], completedTasks = [];
     let currentTaskId = null;
     let currentWeekOffset = 0;
-    let currentMonthOffset = 0;
     let isAddModeBulk = false;
+    let historyOpen = false;
+    let pastWeeksOpen = false;
     let weeklyGoals = {};
     let userId = '';
-    let pastWeeksOpen = false;
 
-    // ---- User ID ----
+    // ---- Timer state ----
+    let activeTimer = null; // { taskId, startTime, startMs, intervalId }
+
+    // ==================== User ID ====================
 
     function setUserId() {
-      const input = document.getElementById('userIdInput').value.trim();
-      if (!input) { alert('ユーザーIDを入力してください'); return; }
-      if (input.length < 4) { alert('ユーザーIDは4文字以上にしてください'); return; }
-      userId = input;
+      const v = document.getElementById('userIdInput').value.trim();
+      if (!v) { alert('ユーザーIDを入力してください'); return; }
+      if (v.length < 4) { alert('ユーザーIDは4文字以上にしてください'); return; }
+      userId = v;
       localStorage.setItem('studyTrackerUserId', userId);
       document.getElementById('userIdModal').style.display = 'none';
       init();
     }
 
     function changeUserId() {
-      if (confirm('ユーザーIDを変更すると、現在のデータにアクセスできなくなります。よろしいですか？')) {
+      if (confirm('ユーザーIDを変更すると現在のデータにアクセスできなくなります。よろしいですか？')) {
         localStorage.removeItem('studyTrackerUserId');
         location.reload();
       }
@@ -400,82 +298,48 @@
 
     function checkUserId() {
       const saved = localStorage.getItem('studyTrackerUserId');
-      if (saved) {
-        userId = saved;
-        return true;
-      }
+      if (saved) { userId = saved; return true; }
       document.getElementById('userIdModal').style.display = 'flex';
       return false;
     }
 
-    // ---- Week key helpers ----
+    // ==================== Week key ====================
 
     function getWeekKey(date) {
       const d = new Date(date);
       d.setHours(0, 0, 0, 0);
       const day = d.getDay();
-      const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-      const monday = new Date(d);
-      monday.setDate(diff);
-      return monday.toISOString().split('T')[0];
+      d.setDate(d.getDate() - day + (day === 0 ? -6 : 1));
+      return d.toISOString().split('T')[0];
+    }
+    function getCurrentWeekKey() { return getWeekKey(new Date()); }
+    function getWeekRange(key) {
+      const mon = new Date(key);
+      const sun = new Date(mon); sun.setDate(sun.getDate() + 6);
+      const f = d => `${d.getMonth()+1}/${d.getDate()}`;
+      return `${f(mon)} 〜 ${f(sun)}`;
+    }
+    function getWeekRangeFull(key) {
+      const mon = new Date(key);
+      const sun = new Date(mon); sun.setDate(sun.getDate() + 6);
+      return { start: mon.toISOString().split('T')[0], end: sun.toISOString().split('T')[0] };
     }
 
-    function getCurrentWeekKey() {
-      return getWeekKey(new Date());
+    // ==================== Tab ====================
+
+    function switchTab(name) {
+      document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.tab-button').forEach(b => { b.classList.remove('tab-active'); b.classList.add('tab-inactive'); });
+      document.getElementById(`content-${name}`).style.display = 'block';
+      const btn = document.getElementById(`tab-${name}`);
+      btn.classList.remove('tab-inactive'); btn.classList.add('tab-active');
     }
 
-    function getWeekRange(weekKey) {
-      const monday = new Date(weekKey);
-      const sunday = new Date(monday);
-      sunday.setDate(sunday.getDate() + 6);
-      const fmt = d => `${d.getMonth() + 1}/${d.getDate()}`;
-      return `${fmt(monday)} 〜 ${fmt(sunday)}`;
-    }
-
-    function getWeekRangeFull(weekKey) {
-      const monday = new Date(weekKey);
-      const sunday = new Date(monday);
-      sunday.setDate(sunday.getDate() + 6);
-      return {
-        start: monday.toISOString().split('T')[0],
-        end: sunday.toISOString().split('T')[0]
-      };
-    }
-
-    // ---- Tab ----
-
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-      document.querySelectorAll('.tab-button').forEach(b => {
-        b.classList.remove('tab-active');
-        b.classList.add('tab-inactive');
-      });
-      document.getElementById(`content-${tabName}`).style.display = 'block';
-      const btn = document.getElementById(`tab-${tabName}`);
-      btn.classList.remove('tab-inactive');
-      btn.classList.add('tab-active');
-    }
-
-    // ---- Add mode ----
-
-    function toggleAddMode() {
-      isAddModeBulk = !isAddModeBulk;
-      document.getElementById('singleAddForm').style.display = isAddModeBulk ? 'none' : 'block';
-      document.getElementById('bulkAddForm').style.display = isAddModeBulk ? 'block' : 'none';
-      document.getElementById('toggleModeBtn').textContent = isAddModeBulk ? '個別追加' : '一括登録';
-    }
-
-    // ---- Navigation ----
-
-    function changeWeek(offset) { currentWeekOffset += offset; renderWeekGraph(); }
-    function changeMonth(offset) { currentMonthOffset += offset; renderCalendar(); }
-
-    // ---- Init ----
+    // ==================== Init ====================
 
     async function init() {
-      const today = new Date();
-      document.getElementById('taskDate').valueAsDate = today;
-      document.getElementById('extraDate').valueAsDate = today;
+      document.getElementById('taskDate').valueAsDate = new Date();
+      document.getElementById('extraDate').valueAsDate = new Date();
       document.getElementById('startTime').addEventListener('change', () => syncTimeFields('startTime'));
       document.getElementById('endTime').addEventListener('change', () => syncTimeFields('endTime'));
       document.getElementById('actualDuration').addEventListener('input', () => syncTimeFields('actualDuration'));
@@ -483,194 +347,99 @@
       render();
       renderCurrentWeekGoal();
       renderPastWeekGoals();
-      checkMilestones();
       setupRealtimeListeners();
     }
 
-    // ---- Realtime ----
-
     function setupRealtimeListeners() {
-      const { onSnapshot, collection, doc } = window.firestore;
-
-      onSnapshot(collection(window.db, `users/${userId}/tasks`), snapshot => {
-        tasks = snapshot.docs.map(d => ({ ...d.data(), id: d.id }));
+      const { onSnapshot, collection } = window.firestore;
+      onSnapshot(collection(window.db, `users/${userId}/tasks`), snap => {
+        tasks = snap.docs.map(d => ({ ...d.data(), id: d.id }));
         renderTasks();
       });
-
-      onSnapshot(collection(window.db, `users/${userId}/completed`), snapshot => {
-        completedTasks = snapshot.docs.map(d => ({ ...d.data(), id: d.id }))
+      onSnapshot(collection(window.db, `users/${userId}/completed`), snap => {
+        completedTasks = snap.docs.map(d => ({ ...d.data(), id: d.id }))
           .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
-        renderCategoryStats();
-        renderWeekCompare();
         renderWeekGraph();
-        renderCalendar();
+        if (historyOpen) renderHistory();
       });
-
-      onSnapshot(collection(window.db, `users/${userId}/weeklyGoals`), snapshot => {
-        snapshot.docs.forEach(d => { weeklyGoals[d.id] = d.data(); });
+      onSnapshot(collection(window.db, `users/${userId}/weeklyGoals`), snap => {
+        snap.docs.forEach(d => { weeklyGoals[d.id] = d.data(); });
         renderCurrentWeekGoal();
         if (pastWeeksOpen) renderPastWeekGoals();
       });
     }
-
-    // ---- Load ----
 
     async function loadData() {
       const { getDocs, collection } = window.firestore;
-
-      const tasksSnap = await getDocs(collection(window.db, `users/${userId}/tasks`));
-      tasks = tasksSnap.docs.map(d => ({ ...d.data(), id: d.id }));
-
-      const completedSnap = await getDocs(collection(window.db, `users/${userId}/completed`));
-      completedTasks = completedSnap.docs.map(d => ({ ...d.data(), id: d.id }))
+      tasks = (await getDocs(collection(window.db, `users/${userId}/tasks`))).docs.map(d => ({ ...d.data(), id: d.id }));
+      completedTasks = (await getDocs(collection(window.db, `users/${userId}/completed`))).docs
+        .map(d => ({ ...d.data(), id: d.id }))
         .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
-
-      const goalsSnap = await getDocs(collection(window.db, `users/${userId}/weeklyGoals`));
-      goalsSnap.docs.forEach(d => { weeklyGoals[d.id] = d.data(); });
+      (await getDocs(collection(window.db, `users/${userId}/weeklyGoals`))).docs
+        .forEach(d => { weeklyGoals[d.id] = d.data(); });
     }
 
-    // ---- Weekly Goals ----
+    function render() { renderTasks(); renderWeekGraph(); }
 
-    async function saveWeeklyGoal(weekKey, goal, reflection) {
-      const { setDoc, doc } = window.firestore;
-      const range = getWeekRangeFull(weekKey);
-      const data = { goal: goal || '', reflection: reflection || '', weekStart: range.start, weekEnd: range.end };
-      weeklyGoals[weekKey] = data;
-      await setDoc(doc(window.db, `users/${userId}/weeklyGoals`, weekKey), data);
-    }
+    // ==================== Timer ====================
 
-    function renderCurrentWeekGoal() {
-      const weekKey = getCurrentWeekKey();
-      const data = weeklyGoals[weekKey] || {};
-
-      document.getElementById('currentWeekLabel').textContent = getWeekRange(weekKey);
-
-      const goalEl = document.getElementById('currentGoalText');
-      const goalBtn = document.getElementById('editGoalBtn');
-      if (data.goal) {
-        goalEl.textContent = data.goal;
-        goalEl.style.display = 'block';
-        goalBtn.textContent = '編集';
-      } else {
-        goalEl.style.display = 'none';
-        goalBtn.textContent = '+ 目標を設定する';
+    function startTimer(taskId) {
+      if (activeTimer) {
+        clearInterval(activeTimer.intervalId);
       }
-
-      const refEl = document.getElementById('currentReflectionText');
-      const refBtn = document.getElementById('editReflectionBtn');
-      if (data.reflection) {
-        refEl.textContent = `"${data.reflection}"`;
-        refEl.style.display = 'block';
-        refBtn.textContent = '編集';
-      } else {
-        refEl.style.display = 'none';
-        refBtn.textContent = '+ 振り返りを追加する';
-      }
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const startTimeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      const intervalId = setInterval(() => {
+        const el = document.getElementById(`timer-elapsed-${taskId}`);
+        if (!el) return;
+        const secs = Math.floor((Date.now() - activeTimer.startMs) / 1000);
+        const m = Math.floor(secs / 60), s = secs % 60;
+        el.textContent = m > 0 ? `${m}分${pad(s)}秒` : `${s}秒`;
+      }, 1000);
+      activeTimer = { taskId: String(taskId), startTime: startTimeStr, startMs: now.getTime(), intervalId };
+      renderTasks();
     }
 
-    function renderPastWeekGoals() {
-      const currentWeekKey = getCurrentWeekKey();
-      const pastKeys = Object.keys(weeklyGoals)
-        .filter(k => k < currentWeekKey)
-        .sort().reverse();
-
-      const list = document.getElementById('pastWeeksList');
-
-      if (pastKeys.length === 0) {
-        list.innerHTML = '<p style="font-size: 13px; color: var(--text-3);">過去の記録はまだありません</p>';
-        return;
-      }
-
-      list.innerHTML = pastKeys.map(key => {
-        const data = weeklyGoals[key];
-        return `
-          <div style="padding: 14px 0; border-top: 1px solid #f5f5f7;">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-              <span style="font-size: 12px; font-weight: 500; color: var(--text-3);">${getWeekRange(key)}</span>
-              <button onclick="editPastWeek('${key}')" class="btn-ghost" style="padding: 2px 6px; font-size: 12px;">編集</button>
-            </div>
-            ${data.goal
-              ? `<p style="font-size: 14px; color: var(--text-1); margin: 0 0 6px 0;">${data.goal}</p>`
-              : `<p style="font-size: 14px; color: var(--text-3); margin: 0 0 6px 0;">目標未設定</p>`
-            }
-            ${data.reflection
-              ? `<p style="font-size: 13px; color: var(--text-2); font-style: italic; margin: 0;">"${data.reflection}"</p>`
-              : ''
-            }
-          </div>
-        `;
-      }).join('');
+    function stopTimerFixed() {
+      if (!activeTimer) return;
+      clearInterval(activeTimer.intervalId);
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const endTimeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      const duration = Math.max(1, Math.round((Date.now() - activeTimer.startMs) / 60000));
+      const taskId = activeTimer.taskId;
+      const startTimeStr = activeTimer.startTime;
+      activeTimer = null;
+      renderTasks();
+      showCompleteModal(taskId, startTimeStr, endTimeStr, duration);
     }
 
-    async function editCurrentWeekGoal() {
-      const weekKey = getCurrentWeekKey();
-      const data = weeklyGoals[weekKey] || {};
-      const newGoal = prompt('今週の目標を入力:', data.goal || '');
-      if (newGoal !== null) {
-        await saveWeeklyGoal(weekKey, newGoal, data.reflection || '');
-        renderCurrentWeekGoal();
-        if (pastWeeksOpen) renderPastWeekGoals();
-      }
-    }
-
-    async function editCurrentWeekReflection() {
-      const weekKey = getCurrentWeekKey();
-      const data = weeklyGoals[weekKey] || {};
-      const newRef = prompt('今週の振り返りを入力:', data.reflection || '');
-      if (newRef !== null) {
-        await saveWeeklyGoal(weekKey, data.goal || '', newRef);
-        renderCurrentWeekGoal();
-        if (pastWeeksOpen) renderPastWeekGoals();
-      }
-    }
-
-    async function editPastWeek(weekKey) {
-      const data = weeklyGoals[weekKey] || {};
-      const newGoal = prompt('目標を編集:', data.goal || '');
-      if (newGoal === null) return;
-      const newRef = prompt('振り返りを編集:', data.reflection || '');
-      if (newRef === null) return;
-      await saveWeeklyGoal(weekKey, newGoal, newRef);
-      renderPastWeekGoals();
-    }
-
-    function togglePastWeeks() {
-      pastWeeksOpen = !pastWeeksOpen;
-      const list = document.getElementById('pastWeeksList');
-      const chevron = document.getElementById('pastWeeksChevron');
-      list.style.display = pastWeeksOpen ? 'block' : 'none';
-      chevron.style.transform = pastWeeksOpen ? 'rotate(90deg)' : 'rotate(0deg)';
-      if (pastWeeksOpen) renderPastWeekGoals();
-    }
-
-    // ---- Firebase ops ----
+    // ==================== DB ops ====================
 
     async function saveTask(task) {
       const { setDoc, doc } = window.firestore;
       await setDoc(doc(window.db, `users/${userId}/tasks`, String(task.id)), task);
     }
-
     async function saveCompletedTask(task) {
       const { setDoc, doc } = window.firestore;
       await setDoc(doc(window.db, `users/${userId}/completed`, String(task.id)), task);
     }
-
-    async function deleteTaskFromDB(taskId) {
+    async function deleteTaskFromDB(id) {
       const { deleteDoc, doc } = window.firestore;
-      await deleteDoc(doc(window.db, `users/${userId}/tasks`, String(taskId)));
+      await deleteDoc(doc(window.db, `users/${userId}/tasks`, String(id)));
+    }
+    async function deleteCompletedTaskFromDB(id) {
+      const { deleteDoc, doc } = window.firestore;
+      await deleteDoc(doc(window.db, `users/${userId}/completed`, String(id)));
     }
 
-    async function deleteCompletedTaskFromDB(taskId) {
-      const { deleteDoc, doc } = window.firestore;
-      await deleteDoc(doc(window.db, `users/${userId}/completed`, String(taskId)));
-    }
-
-    // ---- Add task ----
+    // ==================== Add task ====================
 
     async function addTask() {
       const date = document.getElementById('taskDate').value;
       const category = document.getElementById('taskCategory').value;
-      const content = document.getElementById('taskContent').value;
+      const content = document.getElementById('taskContent').value.trim();
       const duration = parseInt(document.getElementById('taskDuration').value) || 30;
       if (!date || !content) { alert('日付とタスク内容を入力してください'); return; }
       await saveTask({ id: Date.now(), date, category, content, plannedDuration: duration });
@@ -682,69 +451,60 @@
       const input = document.getElementById('bulkInput').value;
       const defaultDate = document.getElementById('taskDate').value;
       const lines = input.trim().split('\n').filter(l => l.trim());
-      if (lines.length === 0) { alert('タスクを入力してください'); return; }
-      let added = 0;
-      let currentDate = defaultDate;
+      if (!lines.length) { alert('タスクを入力してください'); return; }
+      let added = 0, currentDate = defaultDate;
       for (const line of lines) {
-        const trimmed = line.trim();
-        const parsed = parseFlexibleDate(trimmed);
-        if (parsed) { currentDate = parsed; continue; }
-        const task = parseTaskLine(trimmed);
-        if (task) {
-          await saveTask({ id: Date.now() + added, date: currentDate, category: task.category, content: task.content, plannedDuration: task.duration });
-          added++;
-        }
+        const t = line.trim();
+        const pd = parseFlexibleDate(t);
+        if (pd) { currentDate = pd; continue; }
+        const pt = parseTaskLine(t);
+        if (pt) { await saveTask({ id: Date.now() + added, date: currentDate, category: pt.category, content: pt.content, plannedDuration: pt.duration }); added++; }
       }
-      if (added > 0) { document.getElementById('bulkInput').value = ''; alert(`${added}件のタスクを追加しました`); }
+      if (added > 0) { document.getElementById('bulkInput').value = ''; alert(`${added}件追加しました`); }
       else alert('タスクを認識できませんでした');
     }
 
-    // ---- Date / task parsing ----
+    function toggleAddMode() {
+      isAddModeBulk = !isAddModeBulk;
+      document.getElementById('singleAddForm').style.display = isAddModeBulk ? 'none' : 'block';
+      document.getElementById('bulkAddForm').style.display = isAddModeBulk ? 'block' : 'none';
+      document.getElementById('toggleModeBtn').textContent = isAddModeBulk ? '個別追加' : '一括登録';
+    }
+
+    // ==================== Date/Task parsing ====================
 
     function parseFlexibleDate(line) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (line === '今日') return formatDate(today);
-      if (line === '明日') { const d = new Date(today); d.setDate(d.getDate() + 1); return formatDate(d); }
-      if (line === '明後日') { const d = new Date(today); d.setDate(d.getDate() + 2); return formatDate(d); }
+      const today = new Date(); today.setHours(0,0,0,0);
+      if (line === '今日') return fmt(today);
+      if (line === '明日') { const d = new Date(today); d.setDate(d.getDate()+1); return fmt(d); }
+      if (line === '明後日') { const d = new Date(today); d.setDate(d.getDate()+2); return fmt(d); }
       const slash = line.match(/^(\d{1,2})\/(\d{1,2})$/);
-      if (slash) {
-        const d = new Date(today.getFullYear(), parseInt(slash[1]) - 1, parseInt(slash[2]));
-        return isNaN(d.getTime()) ? null : formatDate(d);
-      }
-      const iso = line.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-      if (iso) { const d = new Date(line); return isNaN(d.getTime()) ? null : line; }
+      if (slash) { const d = new Date(today.getFullYear(), +slash[1]-1, +slash[2]); return isNaN(d) ? null : fmt(d); }
+      const iso = line.match(/^\d{4}-\d{2}-\d{2}$/);
+      if (iso) { const d = new Date(line); return isNaN(d) ? null : line; }
       return null;
     }
-
-    function formatDate(d) { return d.toISOString().split('T')[0]; }
-
+    function fmt(d) { return d.toISOString().split('T')[0]; }
     function parseTaskLine(line) {
-      const durationMatch = line.match(/(\d+)\s*分$/);
-      const duration = durationMatch ? parseInt(durationMatch[1]) : 30;
-      const withoutDuration = durationMatch ? line.replace(/\s*\d+\s*分$/, '').trim() : line.trim();
-      let category = 'その他';
-      let content = withoutDuration;
+      const dm = line.match(/(\d+)\s*分$/);
+      const duration = dm ? +dm[1] : 30;
+      const base = dm ? line.replace(/\s*\d+\s*分$/, '').trim() : line.trim();
+      let category = 'その他', content = base;
       for (const cat of CATEGORIES) {
-        if (withoutDuration.startsWith(cat)) {
-          category = cat;
-          content = withoutDuration.slice(cat.length).trim();
-          break;
-        }
+        if (base.startsWith(cat)) { category = cat; content = base.slice(cat.length).trim(); break; }
       }
-      if (!content) return null;
-      return { category, content, duration };
+      return content ? { category, content, duration } : null;
     }
 
-    // ---- Complete modal ----
+    // ==================== Complete modal ====================
 
-    function showCompleteModal(taskId) {
+    function showCompleteModal(taskId, preStart = '', preEnd = '', preDuration = '') {
       currentTaskId = taskId;
-      ['startTime', 'endTime', 'actualDuration', 'taskComment'].forEach(id => {
-        document.getElementById(id).value = '';
-      });
-      const modal = document.getElementById('completeModal');
-      modal.style.display = 'flex';
+      document.getElementById('startTime').value = preStart;
+      document.getElementById('endTime').value = preEnd;
+      document.getElementById('actualDuration').value = preDuration || '';
+      document.getElementById('taskComment').value = '';
+      document.getElementById('completeModal').style.display = 'flex';
     }
 
     function closeCompleteModal() {
@@ -752,42 +512,24 @@
       currentTaskId = null;
     }
 
-    function syncTimeFields(changedField) {
-      const startEl = document.getElementById('startTime');
-      const endEl = document.getElementById('endTime');
-      const durEl = document.getElementById('actualDuration');
-
-      const start = startEl.value;
-      const end = endEl.value;
-      const dur = parseInt(durEl.value);
-      const hasDur = durEl.value !== '' && !isNaN(dur) && dur > 0;
-
-      const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
-      const toTime = m => {
-        const mm = ((m % 1440) + 1440) % 1440;
-        return `${String(Math.floor(mm / 60)).padStart(2, '0')}:${String(mm % 60).padStart(2, '0')}`;
-      };
-
-      if (changedField === 'startTime') {
-        if (start && end) {
-          const d = toMin(end) - toMin(start);
-          if (d > 0) durEl.value = d;
-        } else if (start && hasDur) {
-          endEl.value = toTime(toMin(start) + dur);
-        }
-      } else if (changedField === 'endTime') {
-        if (start && end) {
-          const d = toMin(end) - toMin(start);
-          if (d > 0) durEl.value = d;
-        } else if (end && hasDur) {
-          startEl.value = toTime(toMin(end) - dur);
-        }
-      } else if (changedField === 'actualDuration') {
-        if (start && hasDur) {
-          endEl.value = toTime(toMin(start) + dur);
-        } else if (end && hasDur) {
-          startEl.value = toTime(toMin(end) - dur);
-        }
+    function syncTimeFields(changed) {
+      const sEl = document.getElementById('startTime');
+      const eEl = document.getElementById('endTime');
+      const dEl = document.getElementById('actualDuration');
+      const s = sEl.value, e = eEl.value;
+      const dur = parseInt(dEl.value);
+      const hasDur = dEl.value !== '' && !isNaN(dur) && dur > 0;
+      const toMin = t => { const [h,m] = t.split(':').map(Number); return h*60+m; };
+      const toTime = m => { const mm = ((m%1440)+1440)%1440; return `${String(Math.floor(mm/60)).padStart(2,'0')}:${String(mm%60).padStart(2,'0')}`; };
+      if (changed === 'startTime') {
+        if (s && e) { const d = toMin(e)-toMin(s); if (d>0) dEl.value = d; }
+        else if (s && hasDur) eEl.value = toTime(toMin(s)+dur);
+      } else if (changed === 'endTime') {
+        if (s && e) { const d = toMin(e)-toMin(s); if (d>0) dEl.value = d; }
+        else if (e && hasDur) sEl.value = toTime(toMin(e)-dur);
+      } else if (changed === 'actualDuration') {
+        if (s && hasDur) eEl.value = toTime(toMin(s)+dur);
+        else if (e && hasDur) sEl.value = toTime(toMin(e)-dur);
       }
     }
 
@@ -796,435 +538,337 @@
       if (!task) return;
       const startTime = document.getElementById('startTime').value;
       const endTime = document.getElementById('endTime').value;
-      let actualDuration = parseInt(document.getElementById('actualDuration').value);
+      const actualDuration = parseInt(document.getElementById('actualDuration').value);
       const comment = document.getElementById('taskComment').value;
-      if (!actualDuration || actualDuration <= 0) {
-        alert('実際の時間を入力してください');
-        return;
-      }
-      await saveCompletedTask({ ...task, completedAt: new Date().toISOString(), startTime: startTime || null, endTime: endTime || null, actualDuration, comment });
+      if (!actualDuration || actualDuration <= 0) { alert('実際の時間を入力してください'); return; }
+      await saveCompletedTask({ ...task, completedAt: new Date().toISOString(), startTime: startTime||null, endTime: endTime||null, actualDuration, comment });
       await deleteTaskFromDB(task.id);
       closeCompleteModal();
-      checkMilestones();
     }
 
     async function uncompleteTask(index) {
-      const task = completedTasks[index];
-      await saveTask({ id: Date.now(), date: task.date, category: task.category, content: task.content, plannedDuration: task.plannedDuration });
-      await deleteCompletedTaskFromDB(task.id);
+      const t = completedTasks[index];
+      await saveTask({ id: Date.now(), date: t.date, category: t.category, content: t.content, plannedDuration: t.plannedDuration });
+      await deleteCompletedTaskFromDB(t.id);
     }
-
     async function deleteHistory(index) {
       if (confirm('この履歴を削除しますか?')) await deleteCompletedTaskFromDB(completedTasks[index].id);
     }
-
     async function editHistory(index) {
-      const task = completedTasks[index];
-      const c = prompt('タスク内容を編集:', task.content);
-      if (c !== null && c.trim()) task.content = c.trim();
-      const d = prompt('実際の時間（分）を編集:', task.actualDuration);
-      if (d !== null && !isNaN(parseInt(d))) task.actualDuration = parseInt(d);
-      const cm = prompt('コメントを編集:', task.comment || '');
-      if (cm !== null) task.comment = cm;
-      await saveCompletedTask(task);
+      const t = completedTasks[index];
+      const c = prompt('タスク内容を編集:', t.content); if (c?.trim()) t.content = c.trim();
+      const d = prompt('実際の時間（分）:', t.actualDuration); if (d && !isNaN(+d)) t.actualDuration = +d;
+      const cm = prompt('コメント:', t.comment||''); if (cm !== null) t.comment = cm;
+      await saveCompletedTask(t);
     }
-
     async function deleteTask(index) {
-      if (confirm('このタスクを削除しますか?')) await deleteTaskFromDB(tasks[index].id);
-    }
-
-    async function editTask(index) {
-      const task = tasks[index];
-      const opts = CATEGORIES.map((c, i) => `${i + 1}: ${c}`).join('\n');
-      const ci = prompt(`カテゴリを選択:\n${opts}\n\n現在: ${task.category}\n番号を入力:`);
-      if (ci !== null) {
-        const idx = parseInt(ci) - 1;
-        if (idx >= 0 && idx < CATEGORIES.length) task.category = CATEGORIES[idx];
-        const nc = prompt('タスク内容を編集:', task.content);
-        if (nc !== null && nc.trim()) task.content = nc.trim();
-        const nd = prompt('予定時間（分）を編集:', task.plannedDuration);
-        if (nd !== null && !isNaN(parseInt(nd))) task.plannedDuration = parseInt(nd);
-        const ndate = prompt('日付を編集 (YYYY-MM-DD):', task.date);
-        if (ndate !== null && /^\d{4}-\d{2}-\d{2}$/.test(ndate)) task.date = ndate;
-        await saveTask(task);
+      if (confirm('このタスクを削除しますか?')) {
+        if (activeTimer && String(activeTimer.taskId) === String(tasks[index].id)) {
+          clearInterval(activeTimer.intervalId); activeTimer = null;
+        }
+        await deleteTaskFromDB(tasks[index].id);
       }
     }
-
+    async function editTask(index) {
+      const t = tasks[index];
+      const opts = CATEGORIES.map((c,i) => `${i+1}: ${c}`).join('\n');
+      const ci = prompt(`カテゴリ:\n${opts}\n\n現在: ${t.category}\n番号:`);
+      if (ci !== null) {
+        const idx = parseInt(ci)-1;
+        if (idx >= 0 && idx < CATEGORIES.length) t.category = CATEGORIES[idx];
+        const nc = prompt('内容:', t.content); if (nc?.trim()) t.content = nc.trim();
+        const nd = prompt('予定時間（分）:', t.plannedDuration); if (nd && !isNaN(+nd)) t.plannedDuration = +nd;
+        const ndate = prompt('日付 (YYYY-MM-DD):', t.date); if (ndate && /^\d{4}-\d{2}-\d{2}$/.test(ndate)) t.date = ndate;
+        await saveTask(t);
+      }
+    }
     async function addExtraStudy() {
       const date = document.getElementById('extraDate').value;
       const category = document.getElementById('extraCategory').value;
-      const content = document.getElementById('extraContent').value;
+      const content = document.getElementById('extraContent').value.trim();
       const duration = parseInt(document.getElementById('extraDuration').value);
       const comment = document.getElementById('extraComment').value;
       if (!date || !content || !duration) { alert('日付、学習内容、時間を入力してください'); return; }
       await saveCompletedTask({ id: Date.now(), date, category, content, plannedDuration: 0, completedAt: new Date().toISOString(), startTime: null, endTime: null, actualDuration: duration, comment, isExtra: true });
-      ['extraContent', 'extraDuration', 'extraComment'].forEach(id => document.getElementById(id).value = '');
-      checkMilestones();
+      ['extraContent','extraDuration','extraComment'].forEach(id => document.getElementById(id).value = '');
     }
 
-    // ---- Render ----
-
-    function render() {
-      renderTasks();
-      renderCategoryStats();
-      renderWeekCompare();
-      renderWeekGraph();
-      renderCalendar();
-    }
+    // ==================== Render tasks ====================
 
     function renderTasks() {
-      const today = new Date().toISOString().split('T')[0];
+      const today = fmt(new Date());
       const todayTasks = [], pastTasks = [], futureTasks = [];
-      tasks.forEach((task, index) => {
-        const t = { ...task, originalIndex: index };
-        if (task.date === today) todayTasks.push(t);
-        else if (task.date < today) pastTasks.push(t);
-        else futureTasks.push(t);
+      tasks.forEach((t, i) => {
+        const tw = { ...t, originalIndex: i };
+        if (t.date === today) todayTasks.push(tw);
+        else if (t.date < today) pastTasks.push(tw);
+        else futureTasks.push(tw);
       });
 
-      // Today
       document.getElementById('todayTaskList').innerHTML = `
-        <div style="border-radius: 12px; overflow: hidden; border: 1px solid #d2d2d7;">
-          <div style="background: #1d1d1f; color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 12px; font-weight: 600;">${today} · 今日</span>
-            ${todayTasks.length > 0 ? `<span style="font-size: 12px; color: #8e8e93;">${todayTasks.length}件</span>` : ''}
+        <div style="border-radius:12px; overflow:hidden; border:1px solid #d2d2d7;">
+          <div style="background:#1d1d1f; color:white; padding:10px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-size:12px; font-weight:600;">今日 · ${today}</span>
+            ${todayTasks.length ? `<span style="font-size:12px; color:#8e8e93;">${todayTasks.length}件</span>` : ''}
           </div>
-          ${todayTasks.length === 0
-            ? '<div style="padding: 16px; font-size: 14px; color: var(--text-3);">タスクはありません</div>'
-            : todayTasks.map(t => renderTaskItem(t, 'today')).join('')
+          ${todayTasks.length
+            ? todayTasks.map(t => taskItem(t, 'today')).join('')
+            : '<div style="padding:16px; font-size:14px; color:var(--text-3);">タスクはありません</div>'
           }
-        </div>
-      `;
+        </div>`;
 
-      // Past
       if (pastTasks.length === 0) {
         document.getElementById('pastTaskList').innerHTML = `
-          <div style="border-radius: 12px; overflow: hidden; border: 1px solid #fca5a5;">
-            <div style="background: #dc2626; color: white; padding: 10px 16px;">
-              <span style="font-size: 12px; font-weight: 600;">過去の未完了</span>
+          <div style="border-radius:12px; overflow:hidden; border:1px solid #fca5a5;">
+            <div style="background:#dc2626; color:white; padding:10px 16px;">
+              <span style="font-size:12px; font-weight:600;">過去の未完了</span>
             </div>
-            <div style="padding: 16px; font-size: 14px; color: var(--text-3);">ありません</div>
-          </div>
-        `;
+            <div style="padding:16px; font-size:14px; color:var(--text-3);">ありません</div>
+          </div>`;
       } else {
         const grouped = {};
-        pastTasks.forEach(t => { if (!grouped[t.date]) grouped[t.date] = []; grouped[t.date].push(t); });
-        const sortedDates = Object.keys(grouped).sort().reverse();
+        pastTasks.forEach(t => { (grouped[t.date] = grouped[t.date]||[]).push(t); });
         document.getElementById('pastTaskList').innerHTML = `
-          <div style="border-radius: 12px; overflow: hidden; border: 1px solid #fca5a5;">
-            <div style="background: #dc2626; color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
-              <span style="font-size: 12px; font-weight: 600;">過去の未完了</span>
-              <span style="font-size: 12px; color: #fca5a5;">${pastTasks.length}件</span>
+          <div style="border-radius:12px; overflow:hidden; border:1px solid #fca5a5;">
+            <div style="background:#dc2626; color:white; padding:10px 16px; display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-size:12px; font-weight:600;">過去の未完了</span>
+              <span style="font-size:12px; color:#fca5a5;">${pastTasks.length}件</span>
             </div>
-            ${sortedDates.map(date => `
-              <div style="padding: 8px 16px 4px; border-top: 1px solid #fee2e2;">
-                <div style="font-size: 11px; font-weight: 500; color: #dc2626; margin-bottom: 4px;">${date}</div>
-                ${grouped[date].map(t => renderTaskItem(t, 'past')).join('')}
-              </div>
-            `).join('')}
-          </div>
-        `;
+            ${Object.keys(grouped).sort().reverse().map(date => `
+              <div style="padding:8px 16px 4px; border-top:1px solid #fee2e2;">
+                <div style="font-size:11px; font-weight:500; color:#dc2626; margin-bottom:4px;">${date}</div>
+                ${grouped[date].map(t => taskItem(t, 'past')).join('')}
+              </div>`).join('')}
+          </div>`;
       }
 
-      // Future
-      if (futureTasks.length === 0) { document.getElementById('futureTaskList').innerHTML = ''; return; }
-      const grouped = {};
-      futureTasks.forEach(t => { if (!grouped[t.date]) grouped[t.date] = []; grouped[t.date].push(t); });
-      const sortedDates = Object.keys(grouped).sort();
-      document.getElementById('futureTaskList').innerHTML = sortedDates.map(date => `
-        <div style="border-radius: 12px; overflow: hidden; border: 1px solid #e8e8ed; margin-bottom: 10px; opacity: 0.65;">
-          <div style="background: #c7c7cc; color: white; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 12px; font-weight: 500;">${date} · 予定</span>
-            <span style="font-size: 12px; color: #f5f5f7;">${grouped[date].length}件</span>
+      if (!futureTasks.length) { document.getElementById('futureTaskList').innerHTML = ''; return; }
+      const gf = {};
+      futureTasks.forEach(t => { (gf[t.date] = gf[t.date]||[]).push(t); });
+      document.getElementById('futureTaskList').innerHTML = Object.keys(gf).sort().map(date => `
+        <div style="border-radius:12px; overflow:hidden; border:1px solid #e8e8ed; margin-bottom:10px; opacity:0.65;">
+          <div style="background:#c7c7cc; color:white; padding:10px 16px; display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-size:12px; font-weight:500;">${date} · 予定</span>
+            <span style="font-size:12px; color:#f5f5f7;">${gf[date].length}件</span>
           </div>
-          ${grouped[date].map(t => renderTaskItem(t, 'future')).join('')}
-        </div>
-      `).join('');
+          ${gf[date].map(t => taskItem(t, 'future')).join('')}
+        </div>`).join('');
     }
 
-    function renderTaskItem(task, variant = 'today') {
-      const color = CATEGORY_COLORS[task.category];
+    function taskItem(task, variant) {
+      const color = CAT_COLOR[task.category];
       const bg = variant === 'past' ? '#fff5f5' : variant === 'future' ? '#fafafa' : 'white';
       const divider = variant === 'past' ? '#fee2e2' : '#f5f5f7';
       const titleColor = variant === 'future' ? 'var(--text-2)' : 'var(--text-1)';
       const metaColor = variant === 'past' ? '#ef4444' : 'var(--text-3)';
-      const padding = variant === 'past' ? '8px 16px' : '12px 16px';
+      const isRunning = activeTimer && String(activeTimer.taskId) === String(task.id);
+
+      const timerBtn = isRunning
+        ? `<button onclick="stopTimerFixed()" class="btn btn-stop" style="font-size:12px; padding:5px 12px;">■ ストップ</button>`
+        : `<button onclick="startTimer('${task.id}')" class="btn btn-start" style="font-size:12px; padding:5px 12px;">▶ スタート</button>`;
+
+      const timerDisplay = isRunning
+        ? `<span id="timer-elapsed-${task.id}" style="font-size:11px; color:#dc2626; font-weight:500;">0秒</span>`
+        : '';
+
       return `
-        <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; padding: ${padding}; background: ${bg}; border-top: 1px solid ${divider};">
-          <div style="flex: 1; min-width: 0;">
-            <div style="margin-bottom: 4px;">
-              <span class="badge" style="background-color: ${color};">${task.category}</span>
+        <div style="display:flex; flex-wrap:wrap; align-items:flex-start; gap:8px; padding:12px 16px; background:${bg}; border-top:1px solid ${divider};">
+          <div style="flex:1; min-width:0;">
+            <div style="margin-bottom:4px;">
+              <span class="badge" style="background:${color};">${task.category}</span>
             </div>
-            <p style="font-size: 14px; font-weight: 500; color: ${titleColor}; margin: 0 0 2px 0; word-break: break-word;">${task.content}</p>
-            <p style="font-size: 12px; color: ${metaColor}; margin: 0;">${task.plannedDuration}分</p>
-          </div>
-          <div style="display: flex; gap: 4px; flex-shrink: 0;">
-            <button onclick="editTask(${task.originalIndex})" class="btn-ghost" style="font-size: 12px;">編集</button>
-            <button onclick="showCompleteModal(${task.id})" class="btn-ghost" style="font-size: 12px;">完了</button>
-            <button onclick="deleteTask(${task.originalIndex})" class="btn-ghost" style="font-size: 12px; color: var(--text-3);">削除</button>
-          </div>
-        </div>
-      `;
-    }
-
-
-    function renderCategoryStats() {
-      const stats = {};
-      CATEGORIES.forEach(cat => { stats[cat] = { streak: 0, totalTime: 0 }; });
-      completedTasks.forEach(task => { stats[task.category].totalTime += task.actualDuration; });
-      CATEGORIES.forEach(cat => { stats[cat].streak = calculateStreak(cat); });
-
-      document.getElementById('categoryStats').innerHTML = CATEGORIES.map(cat => `
-        <div style="background: #f5f5f7; border-radius: 12px; padding: 14px 16px;">
-          <div style="font-size: 12px; font-weight: 500; color: var(--text-2); margin-bottom: 8px;">${cat}</div>
-          <div style="font-size: 22px; font-weight: 600; color: var(--text-1); letter-spacing: -0.02em;">${stats[cat].streak}<span style="font-size: 12px; font-weight: 400; margin-left: 2px;">日</span></div>
-          <div style="font-size: 11px; color: var(--text-3); margin-bottom: 8px;">連続</div>
-          <div style="font-size: 18px; font-weight: 600; color: var(--text-1); letter-spacing: -0.02em;">${(stats[cat].totalTime / 60).toFixed(1)}<span style="font-size: 12px; font-weight: 400; margin-left: 2px;">h</span></div>
-          <div style="font-size: 11px; color: var(--text-3);">累計</div>
-        </div>
-      `).join('');
-    }
-
-    function calculateStreak(category) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      let streak = 0;
-      let checkDate = new Date(today);
-      while (true) {
-        const dateStr = checkDate.toISOString().split('T')[0];
-        const hasTask = completedTasks.some(t => t.category === category && t.date === dateStr);
-        if (hasTask) { streak++; checkDate.setDate(checkDate.getDate() - 1); }
-        else {
-          if (checkDate.getTime() === today.getTime()) { checkDate.setDate(checkDate.getDate() - 1); continue; }
-          break;
-        }
-      }
-      return streak;
-    }
-
-    function renderWeekCompare() {
-      const weeks = [{ label: '2週間前', offset: -14 }, { label: '先週', offset: -7 }, { label: '今週', offset: 0 }];
-      const weekData = weeks.map(w => {
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() + w.offset - startDate.getDay());
-        const endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + 6);
-        const total = completedTasks.filter(t => { const d = new Date(t.date); return d >= startDate && d <= endDate; }).reduce((s, t) => s + t.actualDuration, 0);
-        return { label: w.label, total };
-      });
-      const maxTime = Math.max(...weekData.map(w => w.total), 1);
-
-      document.getElementById('weekCompareChart').innerHTML = `
-        <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 180px; border-bottom: 1px solid #e8e8ed; border-left: 1px solid #e8e8ed; padding: 16px 24px 0; gap: 16px;">
-          ${weekData.map(w => `
-            <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
-              <div style="width: 100%; max-width: 60px; background: #1d1d1f; border-radius: 4px 4px 0 0;" style2="height: ${Math.max((w.total / maxTime) * 140, w.total > 0 ? 3 : 0)}px;"></div>
-              <div style="width: 100%; max-width: 60px; background: #1d1d1f; border-radius: 4px 4px 0 0; height: ${Math.max((w.total / maxTime) * 140, w.total > 0 ? 3 : 0)}px;"></div>
-              <div style="font-size: 13px; font-weight: 600; color: var(--text-1); margin-top: 8px;">${(w.total / 60).toFixed(1)}h</div>
-              <div style="font-size: 11px; color: var(--text-3);">${w.label}</div>
+            <p style="font-size:14px; font-weight:500; color:${titleColor}; margin:0 0 2px; word-break:break-word;">${task.content}</p>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <p style="font-size:12px; color:${metaColor}; margin:0;">${task.plannedDuration}分</p>
+              ${timerDisplay}
             </div>
-          `).join('')}
-        </div>
-      `;
-
-      const thisWeek = getWeekData(0);
-      const lastWeek = getWeekData(-7);
-      document.getElementById('categoryComparison').innerHTML = CATEGORIES.map(cat => {
-        const thisTime = thisWeek.filter(t => t.category === cat).reduce((s, t) => s + t.actualDuration, 0);
-        const lastTime = lastWeek.filter(t => t.category === cat).reduce((s, t) => s + t.actualDuration, 0);
-        const diff = thisTime - lastTime;
-        return `
-          <div style="background: #f5f5f7; border-radius: 12px; padding: 14px 16px;">
-            <div style="font-size: 12px; font-weight: 500; color: var(--text-2); margin-bottom: 6px;">${cat}</div>
-            <div style="font-size: 20px; font-weight: 600; color: var(--text-1);">${(thisTime / 60).toFixed(1)}<span style="font-size: 12px; font-weight: 400; margin-left: 2px;">h</span></div>
-            <div style="font-size: 12px; color: ${diff >= 0 ? '#1d1d1f' : '#aeaeb2'}; margin-top: 2px;">${diff >= 0 ? '▲' : '▼'} ${Math.abs(diff / 60).toFixed(1)}h</div>
           </div>
-        `;
-      }).join('');
+          <div style="display:flex; flex-wrap:wrap; gap:4px; flex-shrink:0; align-items:center;">
+            ${timerBtn}
+            <button onclick="editTask(${task.originalIndex})" class="btn btn-ghost" style="font-size:12px;">編集</button>
+            <button onclick="showCompleteModal('${task.id}')" class="btn btn-ghost" style="font-size:12px;">完了</button>
+            <button onclick="deleteTask(${task.originalIndex})" class="btn btn-ghost" style="font-size:12px; color:var(--text-3);">削除</button>
+          </div>
+        </div>`;
     }
 
-    function getWeekData(offset) {
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() + offset - startDate.getDay());
-      const endDate = new Date(startDate);
-      endDate.setDate(endDate.getDate() + 6);
-      return completedTasks.filter(t => { const d = new Date(t.date); return d >= startDate && d <= endDate; });
+    // ==================== History ====================
+
+    function toggleHistory() {
+      historyOpen = !historyOpen;
+      const list = document.getElementById('historyList');
+      const chevron = document.getElementById('historyChevron');
+      list.style.display = historyOpen ? 'flex' : 'none';
+      chevron.style.transform = historyOpen ? 'rotate(90deg)' : '';
+      if (historyOpen) renderHistory();
     }
+
+    function renderHistory() {
+      const list = document.getElementById('historyList');
+      const recent = completedTasks.slice(0, 30);
+      if (!recent.length) { list.innerHTML = '<p style="font-size:14px; color:var(--text-3);">完了履歴はありません</p>'; return; }
+      list.innerHTML = recent.map((t, i) => `
+        <div style="background:white; border:1px solid #e8e8ed; border-radius:12px; padding:14px 16px;">
+          <div style="display:flex; flex-wrap:wrap; align-items:flex-start; gap:8px; margin-bottom:8px;">
+            <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:0; flex-wrap:wrap;">
+              ${t.isExtra ? `<span class="badge" style="background:#8e8e93;">タスク外</span>` : ''}
+              <span class="badge" style="background:${CAT_COLOR[t.category]};">${t.category}</span>
+              <span style="font-size:12px; color:var(--text-3);">${t.date}</span>
+              ${t.startTime&&t.endTime ? `<span style="font-size:12px; color:var(--text-3);">${t.startTime}–${t.endTime}</span>` : ''}
+            </div>
+            <div style="display:flex; gap:4px; flex-shrink:0;">
+              ${!t.isExtra ? `<button onclick="uncompleteTask(${i})" class="btn btn-ghost" style="font-size:12px;">戻す</button>` : ''}
+              <button onclick="editHistory(${i})" class="btn btn-ghost" style="font-size:12px;">編集</button>
+              <button onclick="deleteHistory(${i})" class="btn btn-ghost" style="font-size:12px; color:var(--text-3);">削除</button>
+            </div>
+          </div>
+          <p style="font-size:14px; font-weight:500; color:var(--text-1); margin:0 0 4px;">${t.content}</p>
+          <p style="font-size:12px; color:var(--text-2); margin:0;">${t.isExtra ? `${t.actualDuration}分` : `${t.actualDuration}分（予定${t.plannedDuration}分）`}</p>
+          ${t.comment ? `<p style="font-size:12px; color:var(--text-2); font-style:italic; margin:4px 0 0;">"${t.comment}"</p>` : ''}
+        </div>`).join('');
+    }
+
+    // ==================== Weekly graph ====================
+
+    function changeWeek(offset) { currentWeekOffset += offset; renderWeekGraph(); }
 
     function renderWeekGraph() {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - startDate.getDay() + currentWeekOffset * 7);
-      const endDate = new Date(startDate);
-      endDate.setDate(endDate.getDate() + 6);
-      document.getElementById('weekTitle').textContent = `${startDate.getMonth() + 1}/${startDate.getDate()} – ${endDate.getMonth() + 1}/${endDate.getDate()}`;
+      const endDate = new Date(startDate); endDate.setDate(endDate.getDate() + 6);
+      document.getElementById('weekTitle').textContent = `${startDate.getMonth()+1}/${startDate.getDate()} – ${endDate.getMonth()+1}/${endDate.getDate()}`;
 
-      const days = [];
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(startDate);
-        d.setDate(d.getDate() + i);
-        days.push(d);
-      }
-
+      const days = Array.from({length:7}, (_, i) => { const d = new Date(startDate); d.setDate(d.getDate()+i); return d; });
       const dayData = days.map(day => {
-        const dateStr = day.toISOString().split('T')[0];
-        const dayTasks = completedTasks.filter(t => t.date === dateStr);
+        const ds = fmt(day);
+        const dayTasks = completedTasks.filter(t => t.date === ds);
         const byCategory = {};
-        CATEGORIES.forEach(cat => { byCategory[cat] = dayTasks.filter(t => t.category === cat).reduce((s, t) => s + t.actualDuration, 0); });
+        CATEGORIES.forEach(cat => { byCategory[cat] = dayTasks.filter(t => t.category===cat).reduce((s,t)=>s+t.actualDuration,0); });
         return { day, tasks: dayTasks, byCategory };
       });
 
-      const rawMax = Math.max(...dayData.map(d => Object.values(d.byCategory).reduce((s, v) => s + v, 0)), 1);
-
-      // 縦軸の最大値・目盛り間隔を計算
-      const getAxisMax = (max) => {
-        const steps = [30, 60, 90, 120, 180, 240, 300, 360, 480, 600, 720];
-        for (const s of steps) { if (s >= max) return s; }
-        return Math.ceil(max / 120) * 120;
-      };
+      const rawMax = Math.max(...dayData.map(d => Object.values(d.byCategory).reduce((s,v)=>s+v,0)), 1);
+      const getAxisMax = m => { for (const s of [30,60,90,120,180,240,300,360,480,600,720]) if (s>=m) return s; return Math.ceil(m/120)*120; };
       const axisMax = getAxisMax(rawMax);
-      const tickInterval = axisMax <= 60 ? 30 : axisMax <= 180 ? 60 : axisMax <= 360 ? 60 : 120;
-      const ticks = [];
-      for (let v = 0; v <= axisMax; v += tickInterval) ticks.push(v);
-      const fmtTick = m => m === 0 ? '0' : m < 60 ? m + '分' : (m / 60) + 'h';
-      const graphH = 140;
+      const tickInterval = axisMax<=60?30 : axisMax<=180?60 : axisMax<=360?60 : 120;
+      const ticks = Array.from({length: Math.floor(axisMax/tickInterval)+1}, (_,i) => i*tickInterval);
+      const fmtTick = m => m===0?'0' : m<60?m+'分' : (m/60)+'h';
+      const GH = 140;
 
       document.getElementById('weekGraphChart').innerHTML = `
-        <div style="display: flex; gap: 0;">
-          <!-- Y-axis labels -->
-          <div style="position: relative; width: 36px; height: ${graphH + 36}px; flex-shrink: 0;">
-            ${ticks.map(v => `
-              <div style="position: absolute; right: 6px; bottom: calc(36px + ${(v / axisMax) * graphH}px - 7px);
-                          font-size: 10px; color: var(--text-3); white-space: nowrap; text-align: right;">${fmtTick(v)}</div>
-            `).join('')}
+        <div style="display:flex; gap:0;">
+          <div style="position:relative; width:36px; height:${GH+36}px; flex-shrink:0;">
+            ${ticks.map(v => `<div style="position:absolute; right:6px; bottom:calc(36px + ${(v/axisMax)*GH}px - 7px); font-size:10px; color:var(--text-3); white-space:nowrap; text-align:right;">${fmtTick(v)}</div>`).join('')}
           </div>
-          <!-- Chart area -->
-          <div style="flex: 1; min-width: 0;">
-            <!-- Bars + grid lines -->
-            <div style="position: relative; height: ${graphH}px; border-bottom: 1px solid #e8e8ed; border-left: 1px solid #e8e8ed;">
-              <!-- Horizontal grid lines -->
-              ${ticks.filter(v => v > 0).map(v => `
-                <div style="position: absolute; left: 0; right: 0; bottom: ${(v / axisMax) * graphH}px;
-                            height: 1px; background: #f0f0f0; pointer-events: none;"></div>
-              `).join('')}
-              <!-- Bars -->
-              <div style="position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 0 6px; gap: 4px;">
-                ${dayData.map((d, i) => {
-                  const cats = CATEGORIES.filter(cat => d.byCategory[cat] > 0);
-                  return `
-                    <div style="flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end;">
-                      <div style="width: 100%; display: flex; flex-direction: column-reverse; border-radius: 3px 3px 0 0; overflow: hidden;">
-                        ${cats.map(cat => {
-                          const h = (d.byCategory[cat] / axisMax) * graphH;
-                          return `<div style="width: 100%; height: ${h}px; background-color: ${CATEGORY_COLORS[cat]};"></div>`;
-                        }).join('')}
-                      </div>
+          <div style="flex:1; min-width:0;">
+            <div style="position:relative; height:${GH}px; border-bottom:1px solid #e8e8ed; border-left:1px solid #e8e8ed;">
+              ${ticks.filter(v=>v>0).map(v => `<div style="position:absolute; left:0; right:0; bottom:${(v/axisMax)*GH}px; height:1px; background:#f0f0f0;"></div>`).join('')}
+              <div style="position:absolute; inset:0; display:flex; align-items:flex-end; padding:0 6px; gap:4px;">
+                ${dayData.map(d => {
+                  const cats = CATEGORIES.filter(cat => d.byCategory[cat]>0);
+                  return `<div style="flex:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end;">
+                    <div style="width:100%; display:flex; flex-direction:column-reverse; border-radius:3px 3px 0 0; overflow:hidden;">
+                      ${cats.map(cat => `<div style="width:100%; height:${(d.byCategory[cat]/axisMax)*GH}px; background:${CAT_COLOR[cat]};"></div>`).join('')}
                     </div>
-                  `;
+                  </div>`;
                 }).join('')}
               </div>
             </div>
-            <!-- Day labels -->
-            <div style="display: flex; padding: 6px 6px 0; gap: 4px;">
-              ${dayData.map((d, i) => `
-                <div style="flex: 1; text-align: center;">
-                  <div style="font-size: 11px; font-weight: 500; color: var(--text-1);">${['日','月','火','水','木','金','土'][i]}</div>
-                  <div style="font-size: 10px; color: var(--text-3);">${d.day.getMonth() + 1}/${d.day.getDate()}</div>
-                </div>
-              `).join('')}
+            <div style="display:flex; padding:6px 6px 0; gap:4px;">
+              ${dayData.map((d,i) => `<div style="flex:1; text-align:center;">
+                <div style="font-size:11px; font-weight:500; color:var(--text-1);">${['日','月','火','水','木','金','土'][i]}</div>
+                <div style="font-size:10px; color:var(--text-3);">${d.day.getMonth()+1}/${d.day.getDate()}</div>
+              </div>`).join('')}
             </div>
           </div>
-        </div>
-      `;
+        </div>`;
 
-      document.getElementById('weekDetails').innerHTML = dayData.map((d, i) => {
-        if (d.tasks.length === 0) return '';
-        return `
-          <div style="margin-top: 12px; background: #f5f5f7; border-radius: 12px; padding: 14px 16px;">
-            <h4 style="font-size: 12px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 10px 0;">${['日曜','月曜','火曜','水曜','木曜','金曜','土曜'][i]} ${d.day.getMonth() + 1}/${d.day.getDate()}</h4>
-            <div style="display: flex; flex-direction: column; gap: 6px;">
-              ${d.tasks.map(t => `
-                <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 6px;">
-                  <span class="badge" style="background-color: ${CATEGORY_COLORS[t.category]};">${t.category}</span>
-                  <span style="font-size: 13px; color: var(--text-1);">${t.content}</span>
-                  <span style="font-size: 12px; color: var(--text-3);">${t.actualDuration}分</span>
-                  ${t.comment ? `<span style="font-size: 12px; color: var(--text-2); font-style: italic;">"${t.comment}"</span>` : ''}
-                </div>
-              `).join('')}
-            </div>
+      document.getElementById('weekDetails').innerHTML = dayData.map((d,i) => {
+        if (!d.tasks.length) return '';
+        return `<div style="margin-top:12px; background:#f5f5f7; border-radius:12px; padding:14px 16px;">
+          <h4 style="font-size:12px; font-weight:600; color:var(--text-3); text-transform:uppercase; letter-spacing:0.04em; margin:0 0 10px;">${['日曜','月曜','火曜','水曜','木曜','金曜','土曜'][i]} ${d.day.getMonth()+1}/${d.day.getDate()}</h4>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            ${d.tasks.map(t => `<div style="display:flex; align-items:center; flex-wrap:wrap; gap:6px;">
+              <span class="badge" style="background:${CAT_COLOR[t.category]};">${t.category}</span>
+              <span style="font-size:13px; color:var(--text-1);">${t.content}</span>
+              <span style="font-size:12px; color:var(--text-3);">${t.actualDuration}分</span>
+              ${t.comment ? `<span style="font-size:12px; color:var(--text-2); font-style:italic;">"${t.comment}"</span>` : ''}
+            </div>`).join('')}
           </div>
-        `;
+        </div>`;
       }).join('');
     }
 
-    function renderCalendar() {
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth() + currentMonthOffset;
-      const firstDay = new Date(year, month, 1);
-      const lastDay = new Date(year, month + 1, 0);
-      const startDay = firstDay.getDay();
+    // ==================== Weekly goals ====================
 
-      document.getElementById('calendarTitle').textContent = `${firstDay.getFullYear()}年 ${firstDay.getMonth() + 1}月`;
-
-      const days = [];
-      for (let i = 0; i < startDay; i++) days.push(null);
-      for (let i = 1; i <= lastDay.getDate(); i++) days.push(i);
-
-      const dayLabels = ['日', '月', '火', '水', '木', '金', '土'];
-
-      document.getElementById('calendarView').innerHTML = `
-        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: #e8e8ed; border-radius: 12px; overflow: hidden; border: 1px solid #e8e8ed;">
-          ${dayLabels.map(d => `
-            <div style="background: #f5f5f7; text-align: center; font-size: 11px; font-weight: 500; color: var(--text-3); padding: 8px 4px;">${d}</div>
-          `).join('')}
-          ${days.map(day => {
-            if (!day) return '<div style="background: #fafafa; min-height: 64px;"></div>';
-            const date = new Date(year, month, day);
-            const dateStr = date.toISOString().split('T')[0];
-            const dayTasks = completedTasks.filter(t => t.date === dateStr);
-            const totalTime = dayTasks.reduce((s, t) => s + t.actualDuration, 0);
-            const isToday = date.toDateString() === new Date().toDateString();
-            const byCategory = {};
-            CATEGORIES.forEach(cat => { byCategory[cat] = dayTasks.filter(t => t.category === cat).reduce((s, t) => s + t.actualDuration, 0); });
-            return `
-              <div style="background: white; min-height: 64px; padding: 6px; ${isToday ? 'outline: 2px solid #1d1d1f; outline-offset: -2px;' : ''}">
-                <div style="font-size: 12px; font-weight: ${isToday ? '700' : '400'}; color: ${isToday ? '#1d1d1f' : 'var(--text-2)'}; margin-bottom: 4px;">${day}</div>
-                ${totalTime > 0 ? `
-                  <div style="font-size: 11px; font-weight: 600; color: var(--text-1); margin-bottom: 3px;">${(totalTime / 60).toFixed(1)}h</div>
-                  ${Object.entries(byCategory).filter(([, t]) => t > 0).map(([cat]) => `
-                    <div style="height: 2px; border-radius: 1px; background-color: ${CATEGORY_COLORS[cat]}; margin-bottom: 2px;"></div>
-                  `).join('')}
-                  ${dayTasks.slice(0, 3).map(t => `
-                    <div style="font-size: 9px; color: var(--text-2); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-top: 2px; line-height: 1.3;">${t.content}</div>
-                  `).join('')}
-                  ${dayTasks.length > 3 ? `<div style="font-size: 9px; color: var(--text-3); margin-top: 1px;">+${dayTasks.length - 3}件</div>` : ''}
-                ` : ''}
-              </div>
-            `;
-          }).join('')}
-        </div>
-      `;
+    async function saveWeeklyGoal(key, goal, reflection) {
+      const { setDoc, doc } = window.firestore;
+      const range = getWeekRangeFull(key);
+      const data = { goal: goal||'', reflection: reflection||'', weekStart: range.start, weekEnd: range.end };
+      weeklyGoals[key] = data;
+      await setDoc(doc(window.db, `users/${userId}/weeklyGoals`, key), data);
     }
 
-
-    function checkMilestones() {
-      const messages = [];
-      CATEGORIES.forEach(cat => {
-        const streak = calculateStreak(cat);
-        if ([7, 10, 30, 100].includes(streak) || (streak > 0 && streak % 10 === 0 && streak >= 20)) {
-          messages.push(`${cat}の連続学習${streak}日達成`);
-        }
-      });
-      const totalTime = completedTasks.reduce((s, t) => s + t.actualDuration, 0) / 60;
-      [10, 50, 100, 200, 300, 500, 1000].forEach(m => {
-        if (totalTime >= m && totalTime < m + 1) messages.push(`累計学習時間${m}時間達成`);
-      });
-      if (messages.length > 0) setTimeout(() => alert(messages.join('\n')), 500);
+    function renderCurrentWeekGoal() {
+      const key = getCurrentWeekKey();
+      const data = weeklyGoals[key] || {};
+      document.getElementById('currentWeekLabel').textContent = getWeekRange(key);
+      const gEl = document.getElementById('currentGoalText');
+      const gBtn = document.getElementById('editGoalBtn');
+      if (data.goal) { gEl.textContent = data.goal; gEl.style.display = 'block'; gBtn.textContent = '編集'; }
+      else { gEl.style.display = 'none'; gBtn.textContent = '+ 目標を設定する'; }
+      const rEl = document.getElementById('currentReflectionText');
+      const rBtn = document.getElementById('editReflectionBtn');
+      if (data.reflection) { rEl.textContent = `"${data.reflection}"`; rEl.style.display = 'block'; rBtn.textContent = '編集'; }
+      else { rEl.style.display = 'none'; rBtn.textContent = '+ 振り返りを追加する'; }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      if (checkUserId()) init();
-    });
+    function renderPastWeekGoals() {
+      const currentKey = getCurrentWeekKey();
+      const pastKeys = Object.keys(weeklyGoals).filter(k => k < currentKey).sort().reverse();
+      const list = document.getElementById('pastWeeksList');
+      if (!pastKeys.length) { list.innerHTML = '<p style="font-size:13px; color:var(--text-3);">過去の記録はまだありません</p>'; return; }
+      list.innerHTML = pastKeys.map(key => {
+        const d = weeklyGoals[key];
+        return `<div style="padding:14px 0; border-top:1px solid #f5f5f7;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:12px; font-weight:500; color:var(--text-3);">${getWeekRange(key)}</span>
+            <button onclick="editPastWeek('${key}')" class="btn btn-ghost" style="padding:2px 6px; font-size:12px;">編集</button>
+          </div>
+          ${d.goal ? `<p style="font-size:14px; color:var(--text-1); margin:0 0 6px;">${d.goal}</p>` : `<p style="font-size:14px; color:var(--text-3); margin:0 0 6px;">目標未設定</p>`}
+          ${d.reflection ? `<p style="font-size:13px; color:var(--text-2); font-style:italic; margin:0;">"${d.reflection}"</p>` : ''}
+        </div>`;
+      }).join('');
+    }
+
+    async function editCurrentWeekGoal() {
+      const key = getCurrentWeekKey();
+      const data = weeklyGoals[key] || {};
+      const v = prompt('今週の目標を入力:', data.goal||'');
+      if (v !== null) { await saveWeeklyGoal(key, v, data.reflection||''); renderCurrentWeekGoal(); if (pastWeeksOpen) renderPastWeekGoals(); }
+    }
+    async function editCurrentWeekReflection() {
+      const key = getCurrentWeekKey();
+      const data = weeklyGoals[key] || {};
+      const v = prompt('今週の振り返りを入力:', data.reflection||'');
+      if (v !== null) { await saveWeeklyGoal(key, data.goal||'', v); renderCurrentWeekGoal(); if (pastWeeksOpen) renderPastWeekGoals(); }
+    }
+    async function editPastWeek(key) {
+      const d = weeklyGoals[key] || {};
+      const g = prompt('目標を編集:', d.goal||''); if (g === null) return;
+      const r = prompt('振り返りを編集:', d.reflection||''); if (r === null) return;
+      await saveWeeklyGoal(key, g, r); renderPastWeekGoals();
+    }
+    function togglePastWeeks() {
+      pastWeeksOpen = !pastWeeksOpen;
+      document.getElementById('pastWeeksList').style.display = pastWeeksOpen ? 'block' : 'none';
+      document.getElementById('pastWeeksChevron').style.transform = pastWeeksOpen ? 'rotate(90deg)' : '';
+      if (pastWeeksOpen) renderPastWeekGoals();
+    }
+
+    // ==================== Boot ====================
+
+    window.addEventListener('DOMContentLoaded', () => { if (checkUserId()) init(); });
   </script>
 </body>
 </html>
