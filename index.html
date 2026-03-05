@@ -205,10 +205,6 @@
 
       <!-- Task Tab -->
       <div id="content-tasks" class="tab-content" style="padding: 28px 24px;">
-        <div style="margin-bottom: 28px;">
-          <button onclick="copyToday()" class="btn-secondary" style="font-size: 13px; padding: 8px 14px;">今日をコピー</button>
-        </div>
-
         <!-- Add Task -->
         <div style="margin-bottom: 32px;">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
@@ -371,10 +367,10 @@
   <script>
     const CATEGORIES = ['英語', '資格勉強', '筋トレ', '仕事', 'その他'];
     const CATEGORY_COLORS = {
-      '英語':    '#1d1d1f',
-      '資格勉強': '#3a3a3c',
-      '筋トレ':  '#515154',
-      '仕事':    '#6e6e73',
+      '英語':    '#0071e3',
+      '資格勉強': '#ff9500',
+      '筋トレ':  '#34c759',
+      '仕事':    '#af52de',
       'その他':  '#8e8e93'
     };
 
@@ -1084,25 +1080,66 @@
         return { day, tasks: dayTasks, byCategory };
       });
 
-      const maxTotal = Math.max(...dayData.map(d => Object.values(d.byCategory).reduce((s, v) => s + v, 0)), 1);
+      const rawMax = Math.max(...dayData.map(d => Object.values(d.byCategory).reduce((s, v) => s + v, 0)), 1);
+
+      // 縦軸の最大値・目盛り間隔を計算
+      const getAxisMax = (max) => {
+        const steps = [30, 60, 90, 120, 180, 240, 300, 360, 480, 600, 720];
+        for (const s of steps) { if (s >= max) return s; }
+        return Math.ceil(max / 120) * 120;
+      };
+      const axisMax = getAxisMax(rawMax);
+      const tickInterval = axisMax <= 60 ? 30 : axisMax <= 180 ? 60 : axisMax <= 360 ? 60 : 120;
+      const ticks = [];
+      for (let v = 0; v <= axisMax; v += tickInterval) ticks.push(v);
+      const fmtTick = m => m === 0 ? '0' : m < 60 ? m + '分' : (m / 60) + 'h';
+      const graphH = 140;
 
       document.getElementById('weekGraphChart').innerHTML = `
-        <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 180px; border-bottom: 1px solid #e8e8ed; border-left: 1px solid #e8e8ed; padding: 16px 8px 0; gap: 4px;">
-          ${dayData.map((d, i) => {
-            const cats = CATEGORIES.filter(cat => d.byCategory[cat] > 0);
-            return `
-              <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
-                <div style="width: 100%; display: flex; flex-direction: column-reverse; height: 140px;">
-                  ${cats.map(cat => {
-                    const h = (d.byCategory[cat] / maxTotal) * 140;
-                    return `<div style="width: 100%; height: ${h}px; background-color: ${CATEGORY_COLORS[cat]};"></div>`;
-                  }).join('')}
-                </div>
-                <div style="font-size: 11px; font-weight: 500; color: var(--text-1); margin-top: 6px;">${['日','月','火','水','木','金','土'][i]}</div>
-                <div style="font-size: 10px; color: var(--text-3);">${d.day.getMonth() + 1}/${d.day.getDate()}</div>
+        <div style="display: flex; gap: 0;">
+          <!-- Y-axis labels -->
+          <div style="position: relative; width: 36px; height: ${graphH + 36}px; flex-shrink: 0;">
+            ${ticks.map(v => `
+              <div style="position: absolute; right: 6px; bottom: calc(36px + ${(v / axisMax) * graphH}px - 7px);
+                          font-size: 10px; color: var(--text-3); white-space: nowrap; text-align: right;">${fmtTick(v)}</div>
+            `).join('')}
+          </div>
+          <!-- Chart area -->
+          <div style="flex: 1; min-width: 0;">
+            <!-- Bars + grid lines -->
+            <div style="position: relative; height: ${graphH}px; border-bottom: 1px solid #e8e8ed; border-left: 1px solid #e8e8ed;">
+              <!-- Horizontal grid lines -->
+              ${ticks.filter(v => v > 0).map(v => `
+                <div style="position: absolute; left: 0; right: 0; bottom: ${(v / axisMax) * graphH}px;
+                            height: 1px; background: #f0f0f0; pointer-events: none;"></div>
+              `).join('')}
+              <!-- Bars -->
+              <div style="position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 0 6px; gap: 4px;">
+                ${dayData.map((d, i) => {
+                  const cats = CATEGORIES.filter(cat => d.byCategory[cat] > 0);
+                  return `
+                    <div style="flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end;">
+                      <div style="width: 100%; display: flex; flex-direction: column-reverse; border-radius: 3px 3px 0 0; overflow: hidden;">
+                        ${cats.map(cat => {
+                          const h = (d.byCategory[cat] / axisMax) * graphH;
+                          return `<div style="width: 100%; height: ${h}px; background-color: ${CATEGORY_COLORS[cat]};"></div>`;
+                        }).join('')}
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
               </div>
-            `;
-          }).join('')}
+            </div>
+            <!-- Day labels -->
+            <div style="display: flex; padding: 6px 6px 0; gap: 4px;">
+              ${dayData.map((d, i) => `
+                <div style="flex: 1; text-align: center;">
+                  <div style="font-size: 11px; font-weight: 500; color: var(--text-1);">${['日','月','火','水','木','金','土'][i]}</div>
+                  <div style="font-size: 10px; color: var(--text-3);">${d.day.getMonth() + 1}/${d.day.getDate()}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
         </div>
       `;
 
@@ -1172,35 +1209,6 @@
       `;
     }
 
-    function copyToday() {
-      const today = new Date().toISOString().split('T')[0];
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
-      const todayCompleted = completedTasks.filter(t => t.date === today);
-      const todayPending = tasks.filter(t => t.date === today);
-      const yesterdayPending = tasks.filter(t => t.date === yesterdayStr);
-      if (!todayCompleted.length && !todayPending.length && !yesterdayPending.length) { alert('コピーするタスクがありません'); return; }
-      let text = `${today}\n\n`;
-      if (todayCompleted.length) {
-        text += '完了:\n';
-        todayCompleted.forEach(t => { text += `[${t.category}] ${t.content} (${t.actualDuration}分)\n`; if (t.comment) text += `  ${t.comment}\n`; });
-        text += '\n';
-      }
-      if (todayPending.length) {
-        text += '未完了（今日）:\n';
-        todayPending.forEach(t => { text += `[${t.category}] ${t.content} (${t.plannedDuration}分)\n`; });
-        text += '\n';
-      }
-      if (yesterdayPending.length) {
-        text += '未完了（昨日）:\n';
-        yesterdayPending.forEach(t => { text += `[${t.category}] ${t.content} (${t.plannedDuration}分)\n`; });
-        text += '\n';
-      }
-      const totalTime = todayCompleted.reduce((s, t) => s + t.actualDuration, 0);
-      if (totalTime > 0) text += `合計: ${(totalTime / 60).toFixed(1)}時間`;
-      navigator.clipboard.writeText(text).then(() => alert('コピーしました'));
-    }
 
     function checkMilestones() {
       const messages = [];
