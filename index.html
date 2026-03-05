@@ -481,8 +481,9 @@
       const today = new Date();
       document.getElementById('taskDate').valueAsDate = today;
       document.getElementById('extraDate').valueAsDate = today;
-      document.getElementById('startTime').addEventListener('change', calculateDuration);
-      document.getElementById('endTime').addEventListener('change', calculateDuration);
+      document.getElementById('startTime').addEventListener('change', () => syncTimeFields('startTime'));
+      document.getElementById('endTime').addEventListener('change', () => syncTimeFields('endTime'));
+      document.getElementById('actualDuration').addEventListener('input', () => syncTimeFields('actualDuration'));
       await loadData();
       render();
       renderCurrentWeekGoal();
@@ -757,14 +758,42 @@
       currentTaskId = null;
     }
 
-    function calculateDuration() {
-      const start = document.getElementById('startTime').value;
-      const end = document.getElementById('endTime').value;
-      if (start && end) {
-        const [sh, sm] = start.split(':').map(Number);
-        const [eh, em] = end.split(':').map(Number);
-        const d = (eh * 60 + em) - (sh * 60 + sm);
-        document.getElementById('actualDuration').value = d > 0 ? d : 0;
+    function syncTimeFields(changedField) {
+      const startEl = document.getElementById('startTime');
+      const endEl = document.getElementById('endTime');
+      const durEl = document.getElementById('actualDuration');
+
+      const start = startEl.value;
+      const end = endEl.value;
+      const dur = parseInt(durEl.value);
+      const hasDur = durEl.value !== '' && !isNaN(dur) && dur > 0;
+
+      const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+      const toTime = m => {
+        const mm = ((m % 1440) + 1440) % 1440;
+        return `${String(Math.floor(mm / 60)).padStart(2, '0')}:${String(mm % 60).padStart(2, '0')}`;
+      };
+
+      if (changedField === 'startTime') {
+        if (start && end) {
+          const d = toMin(end) - toMin(start);
+          if (d > 0) durEl.value = d;
+        } else if (start && hasDur) {
+          endEl.value = toTime(toMin(start) + dur);
+        }
+      } else if (changedField === 'endTime') {
+        if (start && end) {
+          const d = toMin(end) - toMin(start);
+          if (d > 0) durEl.value = d;
+        } else if (end && hasDur) {
+          startEl.value = toTime(toMin(end) - dur);
+        }
+      } else if (changedField === 'actualDuration') {
+        if (start && hasDur) {
+          endEl.value = toTime(toMin(start) + dur);
+        } else if (end && hasDur) {
+          startEl.value = toTime(toMin(end) - dur);
+        }
       }
     }
 
@@ -775,12 +804,9 @@
       const endTime = document.getElementById('endTime').value;
       let actualDuration = parseInt(document.getElementById('actualDuration').value);
       const comment = document.getElementById('taskComment').value;
-      if (!actualDuration) {
-        if (!startTime || !endTime) { alert('実際の時間を入力するか、開始・終了時刻を入力してください'); return; }
-        const [sh, sm] = startTime.split(':').map(Number);
-        const [eh, em] = endTime.split(':').map(Number);
-        actualDuration = (eh * 60 + em) - (sh * 60 + sm);
-        if (actualDuration <= 0) { alert('正しい時刻を入力してください'); return; }
+      if (!actualDuration || actualDuration <= 0) {
+        alert('実際の時間を入力してください');
+        return;
       }
       await saveCompletedTask({ ...task, completedAt: new Date().toISOString(), startTime: startTime || null, endTime: endTime || null, actualDuration, comment });
       await deleteTaskFromDB(task.id);
