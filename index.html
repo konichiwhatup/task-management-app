@@ -26,7 +26,7 @@
     <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-md p-6 mb-6 text-white">
       <div class="flex justify-between items-start">
         <div>
-          <h1 class="text-3xl font-bold mb-2">📚 Task Management App <span class="text-sm text-blue-200">☁️ 同期版</span></h1>
+          <h1 class="text-xl sm:text-3xl font-bold mb-2">📚 Task Management App <span class="text-sm text-blue-200">☁️ 同期版</span></h1>
           <p class="text-blue-100">日々の学習を記録して、成長を可視化しましょう！</p>
           <button onclick="changeUserId()" class="text-xs text-blue-200 hover:text-white mt-2 underline">ユーザーID変更</button>
         </div>
@@ -77,10 +77,10 @@
     <!-- タブナビゲーション -->
     <div class="bg-white rounded-lg shadow-md mb-6">
       <div class="flex border-b overflow-x-auto">
-        <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-button px-6 py-3 font-semibold border-b-2 border-blue-500 text-blue-600 whitespace-nowrap">タスク管理</button>
-        <button onclick="switchTab('weekCompare')" id="tab-weekCompare" class="tab-button px-6 py-3 font-semibold text-gray-600 hover:text-gray-800 whitespace-nowrap">週間比較</button>
-        <button onclick="switchTab('weekGraph')" id="tab-weekGraph" class="tab-button px-6 py-3 font-semibold text-gray-600 hover:text-gray-800 whitespace-nowrap">週間グラフ</button>
-        <button onclick="switchTab('calendar')" id="tab-calendar" class="tab-button px-6 py-3 font-semibold text-gray-600 hover:text-gray-800 whitespace-nowrap">カレンダー</button>
+        <button onclick="switchTab('tasks')" id="tab-tasks" class="tab-button px-3 sm:px-6 py-3 font-semibold text-sm sm:text-base border-b-2 border-blue-500 text-blue-600 whitespace-nowrap">タスク管理</button>
+        <button onclick="switchTab('weekCompare')" id="tab-weekCompare" class="tab-button px-3 sm:px-6 py-3 font-semibold text-sm sm:text-base text-gray-600 hover:text-gray-800 whitespace-nowrap">週間比較</button>
+        <button onclick="switchTab('weekGraph')" id="tab-weekGraph" class="tab-button px-3 sm:px-6 py-3 font-semibold text-sm sm:text-base text-gray-600 hover:text-gray-800 whitespace-nowrap">週間グラフ</button>
+        <button onclick="switchTab('calendar')" id="tab-calendar" class="tab-button px-3 sm:px-6 py-3 font-semibold text-sm sm:text-base text-gray-600 hover:text-gray-800 whitespace-nowrap">カレンダー</button>
       </div>
 
       <!-- タスク管理タブ -->
@@ -185,9 +185,9 @@
       <!-- 週間グラフタブ -->
       <div id="content-weekGraph" class="tab-content p-6 hidden">
         <div class="flex justify-between items-center mb-4">
-          <button onclick="changeWeek(-1)" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">← 前週</button>
-          <h3 class="text-lg font-bold text-gray-800" id="weekTitle"></h3>
-          <button onclick="changeWeek(1)" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">次週 →</button>
+          <button onclick="changeWeek(-1)" class="bg-gray-500 text-white px-2 sm:px-4 py-2 rounded hover:bg-gray-600 text-sm sm:text-base">← 前週</button>
+          <h3 class="text-sm sm:text-lg font-bold text-gray-800" id="weekTitle"></h3>
+          <button onclick="changeWeek(1)" class="bg-gray-500 text-white px-2 sm:px-4 py-2 rounded hover:bg-gray-600 text-sm sm:text-base">次週 →</button>
         </div>
         <div id="weekGraphChart" class="mb-6"></div>
         <div id="weekDetails"></div>
@@ -196,9 +196,9 @@
       <!-- カレンダータブ -->
       <div id="content-calendar" class="tab-content p-6 hidden">
         <div class="flex justify-between items-center mb-4">
-          <button onclick="changeMonth(-1)" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">← 前月</button>
-          <h3 class="text-lg font-bold text-gray-800" id="calendarTitle"></h3>
-          <button onclick="changeMonth(1)" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">次月 →</button>
+          <button onclick="changeMonth(-1)" class="bg-gray-500 text-white px-2 sm:px-4 py-2 rounded hover:bg-gray-600 text-sm sm:text-base">← 前月</button>
+          <h3 class="text-sm sm:text-lg font-bold text-gray-800" id="calendarTitle"></h3>
+          <button onclick="changeMonth(1)" class="bg-gray-500 text-white px-2 sm:px-4 py-2 rounded hover:bg-gray-600 text-sm sm:text-base">次月 →</button>
         </div>
         <div id="calendarView"></div>
       </div>
@@ -476,8 +476,8 @@
               <div class="text-4xl mb-2 ${isUnlocked ? '' : 'grayscale opacity-30'}">${def.icon}</div>
               <div class="text-xs font-semibold ${isUnlocked ? 'text-gray-800' : 'text-gray-400'}">${def.name}</div>
             </div>
-            <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block z-10">
-              <div class="bg-gray-900 text-white text-xs rounded py-2 px-3 whitespace-nowrap">
+            <div class="absolute bottom-full left-0 sm:left-1/2 sm:transform sm:-translate-x-1/2 mb-2 hidden group-hover:block z-10">
+              <div class="bg-gray-900 text-white text-xs rounded py-2 px-3 whitespace-nowrap max-w-[150px] sm:max-w-none">
                 <div class="font-bold">${def.name}</div>
                 <div class="text-gray-300">${def.desc}</div>
               </div>
@@ -1136,18 +1136,18 @@
         `;
       } else {
         return `
-          <div class="flex items-center justify-between p-3 bg-white rounded border shadow-sm">
-            <div class="flex-1">
+          <div class="flex flex-wrap items-start gap-2 p-3 bg-white rounded border shadow-sm">
+            <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 mb-1">
                 <span class="text-xs px-2 py-1 rounded text-white ${CATEGORY_COLORS[task.category]}">${task.category}</span>
               </div>
               <p class="font-semibold">${task.content}</p>
               <p class="text-sm text-gray-600">予定: ${task.plannedDuration}分</p>
             </div>
-            <div class="flex gap-2 flex-wrap">
-              <button onclick="editTask(${task.originalIndex})" class="bg-purple-500 text-white px-3 py-2 rounded hover:bg-purple-600 whitespace-nowrap">編集</button>
-              <button onclick="showCompleteModal(${task.id})" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 whitespace-nowrap">完了</button>
-              <button onclick="deleteTask(${task.originalIndex})" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 whitespace-nowrap">削除</button>
+            <div class="flex gap-1 flex-wrap">
+              <button onclick="editTask(${task.originalIndex})" class="bg-purple-500 text-white px-2 py-1 text-sm rounded hover:bg-purple-600 whitespace-nowrap">編集</button>
+              <button onclick="showCompleteModal(${task.id})" class="bg-green-500 text-white px-2 py-1 text-sm rounded hover:bg-green-600 whitespace-nowrap">完了</button>
+              <button onclick="deleteTask(${task.originalIndex})" class="bg-red-500 text-white px-2 py-1 text-sm rounded hover:bg-red-600 whitespace-nowrap">削除</button>
             </div>
           </div>
         `;
@@ -1393,9 +1393,9 @@
 
       const calendar = document.getElementById('calendarView');
       calendar.innerHTML = `
-        <div class="grid grid-cols-7 gap-2">
-          ${['日', '月', '火', '水', '木', '金', '土'].map(d => 
-            `<div class="text-center font-bold text-gray-700 py-2">${d}</div>`
+        <div class="grid grid-cols-7 gap-0.5 sm:gap-2">
+          ${['日', '月', '火', '水', '木', '金', '土'].map(d =>
+            `<div class="text-center font-bold text-gray-700 text-xs sm:text-sm py-1 sm:py-2">${d}</div>`
           ).join('')}
           ${days.map(day => {
             if (!day) return '<div class="border rounded p-2 bg-gray-100"></div>';
@@ -1411,13 +1411,13 @@
             });
 
             return `
-              <div class="border rounded p-2 min-h-24 ${date.toDateString() === new Date().toDateString() ? 'bg-blue-50 border-blue-300' : 'bg-white'}">
-                <div class="font-semibold text-sm mb-1">${day}</div>
+              <div class="border rounded p-0.5 sm:p-2 min-h-16 sm:min-h-24 ${date.toDateString() === new Date().toDateString() ? 'bg-blue-50 border-blue-300' : 'bg-white'}">
+                <div class="font-semibold text-xs sm:text-sm mb-0.5 sm:mb-1">${day}</div>
                 ${totalTime > 0 ? `
-                  <div class="text-xs font-bold text-gray-700 mb-1">${(totalTime / 60).toFixed(1)}h</div>
+                  <div class="text-xs font-bold text-gray-700 mb-0.5">${(totalTime / 60).toFixed(1)}h</div>
                   ${Object.entries(byCategory).filter(([, time]) => time > 0).map(([cat, time]) => `
-                    <div class="text-xs ${CATEGORY_COLORS[cat]} text-white px-1 rounded mb-1">
-                      ${cat}: ${(time / 60).toFixed(1)}h
+                    <div class="text-xs ${CATEGORY_COLORS[cat]} text-white px-0.5 sm:px-1 rounded mb-0.5 truncate">
+                      <span class="hidden sm:inline">${cat}: </span>${(time / 60).toFixed(1)}h
                     </div>
                   `).join('')}
                 ` : ''}
